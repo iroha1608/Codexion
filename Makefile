@@ -1,8 +1,7 @@
 # --- Target ---
-TARGET		=	push_swap
-BONUS_NAME	=	checker
+TARGET		=	codexion
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror -I$(HDR_DIR)
+CFLAGS		=	-Wall -Wextra -Werror -pthread -I$(HDR_DIR)
 
 # --- Directories ---
 # Root Directory Name
@@ -45,16 +44,10 @@ SRCS_OPE	=	swap.c \
 
 # --- Object Files ---
 OBJS		=	$(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
-OBJS_COMMON =	$(filter-out $(OBJ_DIR)checker.o, $(OBJS))
-OBJS_BONUS	=	$(filter-out $(OBJ_DIR)main.o, $(OBJS))
 
 # --- Headers File ---
-HDR_NAME	=	push_swap.h
+HDR_NAME	=	codexion.h
 HDRS		=	$(addprefix $(HDR_DIR), $(HDR_NAME))
-
-# --- Libft File ---
-LIBFT_DIR	=	./Libft/
-LIBFT		=	$(LIBFT_DIR)libft.a
 
 vpath %.c	$(SRC_DIR) \
 			$(SRC_DIR)$(MAIN_DIR) \
@@ -67,8 +60,12 @@ vpath %.c	$(SRC_DIR) \
 # Mandatory Part
 all:	$(TARGET)
 
-$(TARGET):	$(OBJS_COMMON) $(LIBFT)
-	$(CC) $(CFLAGS) -o $@ $(OBJS_COMMON) -L$(LIBFT_DIR) -lft
+
+# Mandatory Part
+all:	$(TARGET)
+
+$(TARGET):	$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) -lft
 
 $(OBJ_DIR)%.o:	%.c $(HDRS) | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
@@ -76,27 +73,12 @@ $(OBJ_DIR)%.o:	%.c $(HDRS) | $(OBJ_DIR)
 $(OBJ_DIR):
 	mkdir -p $@
 
-$(LIBFT):	FORCE
-	make -C $(LIBFT_DIR)
-
-FORCE:
-	
-
-# Bonus Part
-bonus: $(BONUS_NAME)
-
-$(BONUS_NAME):	$(OBJS_BONUS) $(LIBFT)
-	$(CC) $(CFLAGS) -o $@ $(OBJS_BONUS) -L$(LIBFT_DIR) -lft
-
-
 clean:
-	rm -rf $(OBJ_DIR) 
-	make -C $(LIBFT_DIR) clean
+	rm -rf $(OBJ_DIR)
 
 fclean:	clean
-	rm -f $(TARGET) $(BONUS_NAME)
-	make -C $(LIBFT_DIR) fclean
+	rm -f $(TARGET)
 
 re:	fclean all
 
-.PHONY: all clean fclean re bonus FORCE
+.PHONY: all clean fclean re
