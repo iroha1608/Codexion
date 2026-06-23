@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 18:23:40 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/22 19:57:28 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/23 16:02:24 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int				shared_counter = 0;
 // 共有リソースの鍵。pthread_mutex_t型
 pthread_mutex_t	counter_mutex;
 
-// シグナルを送るための変数と鍵。
+// シグナルを送るための鍵(mutex)と条件変数(condition variable)。
 // pthread_mutex_t型、pthread_cond_t型
 int 			is_ready = 0;
 pthread_mutex_t	ready_mutex;
@@ -69,6 +69,7 @@ void	*thread_b_routine()
 	while (is_ready == 0)
 		// pthread_cond_waitは呼ばれると自動で鍵を開けて眠る。
 		// 起こされたときに自動で鍵を締めて再開する。
+		// 条件変数(ready_cond)にシグナルが送られてくるまでブロック状態
 		pthread_cond_wait(&ready_cond, &ready_mutex);
 	pthread_mutex_unlock(&ready_mutex);
 	printf("[Thread B] is caught [Thread A]'s signals!: Final count is %d.\n", shared_counter);
@@ -100,6 +101,6 @@ int	main(void)
 	pthread_mutex_destroy(&ready_mutex);
 	pthread_cond_destroy(&ready_cond);
 
-	printf("[\33[31mMain\33[0m] All process is complete!\n");
+	printf("[\33[32mMain\33[0m] All process is complete!\n");
 	return 0;
 }
