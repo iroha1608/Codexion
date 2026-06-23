@@ -19,7 +19,10 @@ SCHEDULER_DIR	=	scheduler/
 SRCS		=	$(SRCS_MAIN) $(SRCS_CODER) $(SRCS_SCHEDULER)
 SRCS_MAIN	=	main.c \
 				init.c \
-				heap.c
+				heap.c \
+				parse.c \
+				utils.c \
+				print.c
 # SRCS_CODER	=
 # SRCS_SCHEDULER	=
 

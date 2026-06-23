@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 22:16:06 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/23 22:36:06 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ struct s_coder {
 
 	void		*(*run)(void *arg);
 	bool		(*request_dongles)(t_coder *self);
-	void		(*request_dongles)(t_coder *self);
+	void		(*release_dongles)(t_coder *self);
 	bool		(*print_status)(t_coder *self, const char *status);
 };
 
@@ -66,7 +66,7 @@ struct s_heap {
 	int		size;
 	int		capacity;
 	int		scheduler_type; // 0 : FIFO, 1 : EDF
-}	t_heap;
+};
 
 // System Data
 struct s_data {
@@ -99,15 +99,15 @@ struct s_data {
 };
 
 // --------------- main.c ---------------
-int			init_data(t_data *data);
 
 // --------------- parse.c ---------------
-int			parse_arguments(int argc, char **argv, t_data *data);
-// static bool parse_scheduler(char *arg, t_data *data)
-// static bool assign_arguments(char **argv, t_data *data)
+bool	parse_arguments(int argc, char **argv, t_data *data);
+// static bool parse_scheduler(char *arg, t_data *data);
+// static bool assign_arguments(char **argv, t_data *data);
 
 // --------------- init.c ---------------
 void		cleanup_data(t_data *data);
+// int			init_data(t_data *data);
 
 // --------------- heap.c ---------------
 int			is_higher_priority(t_coder *a, t_coder *b, int scheduler_type);

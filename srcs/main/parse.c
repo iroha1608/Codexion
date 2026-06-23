@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:54:45 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 22:16:10 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/23 22:40:06 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 // """
 static bool parse_scheduler(char *arg, t_data *data)
 {
-	if (strcmp(argv[8], "fifo") == 0)
+	if (strcmp(arg, "fifo") == 0)
 		data->scheduler_type = 0;
-	else if (strcmp(argv[8], "edf") == 0)
+	else if (strcmp(arg, "edf") == 0)
 		data->scheduler_type = 1;
 	else
 		return (false);
@@ -27,7 +27,7 @@ static bool parse_scheduler(char *arg, t_data *data)
 }
 
 // """
-// all arguments 
+// all arguments
 // """
 static bool assign_arguments(char **argv, t_data *data)
 {
@@ -49,7 +49,7 @@ static bool assign_arguments(char **argv, t_data *data)
 	data->time_to_refactor = tmp[4] * 1000LL;
 	data->num_compiles_required = (int)tmp[5];
 	data->dongle_cooldown = tmp[6] * 1000LL;
-	return (true)
+	return (true);
 }
 
 // """S

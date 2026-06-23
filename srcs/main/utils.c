@@ -6,11 +6,11 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:34:51 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 22:16:04 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/23 22:28:06 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../hdrs/codexion.c"
+#include "../../hdrs/codexion.h"
 
 // """
 // inside time get micro second.
@@ -29,7 +29,7 @@ long long	get_time(void)
 void		set_timespec(struct timespec *ts, long long time)
 {
 	ts->tv_sec = time / 1000000LL;
-	ts->tv_nec = (time % 1000000LL) * 1000LL;
+	ts->tv_nsec = (time % 1000000LL) * 1000LL;
 }
 
 // """
@@ -43,7 +43,7 @@ void		precise_sleep(long long sleep_time, t_data *data)
 	target_time = get_time() + sleep_time;
 	set_timespec(&ts, target_time);
 	pthread_mutex_lock(&data->time_mutex);
-	pthread_cond_timewait(&data->exit_cond, &data->time_mutex, &ts);
+	pthread_cond_timedwait(&data->exit_cond, &data->time_mutex, &ts);
 	pthread_mutex_unlock(&data->time_mutex);
 }
 
@@ -69,5 +69,5 @@ bool		ft_atol(const char *str, long long *result)
 		i ++;
 	}
 	*result = ret;
-	return (true)
+	return (true);
 }

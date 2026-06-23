@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:46:42 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 22:16:44 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/23 22:26:46 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,15 @@ bool	coder_print_status(t_coder *self, const char *status)
 	// fprintf is failed, all coder destroy.
 	if (is_running)
 	{
-		pthread_mutex_lock(&self->data->time_mutex);
-		self->data->is_simulation_running = false;
-		pthread_cond_broadcast(&self->data->exit_cond);
-		pthread_mutex_unlock(&self->data->time_mutex);
+		now_micro = get_time() - self->data->simulation_start_time;
+		now_milli = now_micro / 1000LL;
+		if (printf("%lld %d %d\n", now_micro, self->id, status < 0))
+		{
+			pthread_mutex_lock(&self->data->time_mutex);
+			self->data->is_simulation_running = false;
+			pthread_cond_broadcast(&self->data->exit_cond);
+			pthread_mutex_unlock(&self->data->time_mutex);
+		}
 	}
 	pthread_mutex_unlock(&self->data->print_mutex);
 	return (is_running);
