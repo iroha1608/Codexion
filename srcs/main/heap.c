@@ -6,10 +6,14 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 18:43:07 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 19:26:48 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/23 22:16:13 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// """
+// Todo:	関数の切り分け
+// 			行数制限の回避
+// """
 #include "../../hdrs/codexion.h"
 
 int	is_higher_priority(t_coder *a, t_coder *b, int scheduler_type)
@@ -36,7 +40,6 @@ t_heap	*init_heap(int capacity, int scheduler_type)
 {
 	t_heap	*heap;
 
-	
 	heap = malloc(sizeof(t_heap));
 	if (!heap)
 		return (NULL);
