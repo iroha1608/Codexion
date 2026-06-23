@@ -6,11 +6,11 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:06:39 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 17:58:11 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/23 19:28:21 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../hdrs/codexion.h"
+#include "../../hdrs/codexion.h"
 
 int	print_error(const char *msg)
 {
@@ -81,7 +81,7 @@ int	main(int argc, char **argv)
 	if (init_data(&data) != 0)
 		return (1);
 
-	printf("Initialization success\n");
+	printf("Initialization success!\n");
 
 	cleanup_data(&data);
 	return (0);

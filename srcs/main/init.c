@@ -6,11 +6,11 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 18:01:29 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/23 19:15:37 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../hdrs/codexion.h"
+#include "../../hdrs/codexion.h"
 
 void	cleanup_data(t_data *data)
 {
@@ -35,6 +35,10 @@ void	cleanup_data(t_data *data)
 	pthread_mutex_destroy(&data->time_mutex);
 	pthread_mutex_destroy(&data->print_mutex);
 	pthread_cond_destroy(&data->sv_cond);
+
+	// queueの後片付け
+	if (data->wait_queue)
+		free_heap(data->wait_queue);
 }
 
 int	init_data(t_data *data)
@@ -71,6 +75,15 @@ int	init_data(t_data *data)
 		data->coders[i].right_dongle_id = (i + 1) % data->num_coders;
 		i ++;
 	}
+
+	// queueの初期化
+	data->wait_queue = init_heap(data->num_coders, data->scheduler_type);
+	if (!data->wait_queue)
+	{
+		cleanup_data(data);
+		return print_error("Heap malloc failed.");
+	}
+
 	data->is_simulation_running = 1;
 	return (0);
 }
