@@ -1,6 +1,7 @@
 # Project specific (Mandatory rule)
 
 # ----- C -----
+codexion
 a.out
 *.o
 
