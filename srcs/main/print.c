@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:46:42 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 22:26:46 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/23 23:03:27 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ bool	coder_print_status(t_coder *self, const char *status)
 	{
 		now_micro = get_time() - self->data->simulation_start_time;
 		now_milli = now_micro / 1000LL;
-		if (printf("%lld %d %d\n", now_micro, self->id, status < 0))
+		if (printf("%lld %d %s\n", now_milli, self->id, status) < 0)
 		{
 			pthread_mutex_lock(&self->data->time_mutex);
 			self->data->is_simulation_running = false;

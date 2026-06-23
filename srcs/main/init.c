@@ -6,58 +6,66 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 22:16:12 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/23 23:03:15 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// """
+// """
 #include "../../hdrs/codexion.h"
 
-void	cleanup_data(t_data *data)
+static bool	init_sys_mutex_1(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	if (data->dongle_conds)
+	if (pthread_mutex_init(&data->scheduler_mutex, NULL) != 0)
+		return (false)
+	if (pthread_mutex_init(&data->time_mutex, NULL) != 0)
 	{
-		while (i < data->num_coders)
-		{
-			pthread_cond_destroy(&data->dongle_conds[i]);
-			i ++;
-		}
-		free(data->dongle_conds);
+		pthread_mutex_destroy(&data->schduler_mutex);
+		return (false)
 	}
-	if (data->coders)
-		free(data->coders);
-	if (data->dongles)
-		free(data->dongles);
-
-	pthread_mutex_destroy(&data->scheduler_mutex);
-	pthread_mutex_destroy(&data->time_mutex);
-	pthread_mutex_destroy(&data->print_mutex);
-	pthread_cond_destroy(&data->sv_cond);
-
-	// queueの後片付け
-	if (data->wait_queue)
-		free_heap(data->wait_queue);
+	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
+	{
+		pthread_mutex_destroy(&data->schduler_mutex);
+		pthread_mutex_destroy(&data->time_mutex);
+		return (false)
+	}
+	return (true)
+}
+static bool	init_sys_mutex_2(t_data *data)
+{
+	if (pthread_cond_init(&data->sv_cond, NULL) != 0)
+	{
+		pthread_mutex_destroy(&data->schduler_mutex);
+		pthread_mutex_destroy(&data->time_mutex);
+		pthread_mutex_destroy(&data->print_mutex);
+		return (false)
+	}
+	if (pthread_cond_init(&data->exit_cond, NULL) != 0)
+	{
+		pthread_mutex_destroy(&data->schduler_mutex);
+		pthread_mutex_destroy(&data->time_mutex);
+		pthread_mutex_destroy(&data->print_mutex);
+		pthread_cond_destroy(&data->sv_cond);
+		return (false)
+	}
+	return (true)
 }
 
-int	init_data(t_data *data)
+static bool allocate_arrays(t_data *data)
 {
-	int	i;
-
 	data->coders = malloc(data->num_coders * sizeof(t_coder));
 	data->dongles = malloc(data->num_coders * sizeof(t_dongle));
 	data->dongle_conds = malloc(data->num_coders * sizeof(pthread_cond_t));
-
 	if (!data->coders || !data->dongles || !data->dongle_conds)
 	{
 		cleanup_data(data);
 		return print_error("Malloc failed.");
 	}
-	pthread_mutex_init(&data->scheduler_mutex, NULL);
-	pthread_mutex_init(&data->time_mutex, NULL);
-	pthread_mutex_init(&data->print_mutex, NULL);
-	pthread_cond_init(&data->sv_cond, NULL);
+	return (true)
+}
+static bool init_coders_and_conds(t_data *data)
+{
+	int	i;
 
 	i = 0;
 	while (i < data->num_coders)
@@ -75,7 +83,14 @@ int	init_data(t_data *data)
 		data->coders[i].right_dongle_id = (i + 1) % data->num_coders;
 		i ++;
 	}
+	return (true)
+}
 
+
+// """
+// """
+int	init_data(t_data *data)
+{
 	// queueの初期化
 	data->wait_queue = init_heap(data->num_coders, data->scheduler_type);
 	if (!data->wait_queue)
@@ -84,6 +99,6 @@ int	init_data(t_data *data)
 		return print_error("Heap malloc failed.");
 	}
 
-	data->is_simulation_running = 1;
-	return (0);
+	data->is_simulation_running = true;
+	return (true);
 }

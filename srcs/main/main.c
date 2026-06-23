@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:06:39 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 22:35:25 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/23 23:03:19 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main(int argc, char **argv)
 	t_data	data;
 
 	memset(&data, 0, sizeof(t_data));
-	if (parse_arguments(argc, argv, &data) == false)
+	if (parse_arguments(argc, argv, &data))
 		return (1);
 	// if (!init_data(&data))
 		// return (1);
