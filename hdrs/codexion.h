@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 20:17:34 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 21:16:00 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ struct s_data {
 	long long	simulation_start_time;
 	bool		is_simulation_running; // 0 : All thread complete
 	bool		init_error;
+
+	int	ready_count; // Ready complete thread count
+	pthread_cond_t	start_cond; // issei start you no joukenhensuu
 
 	// Array
 	t_coder		*coders;

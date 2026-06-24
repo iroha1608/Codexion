@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 19:12:57 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 19:51:28 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 20:35:18 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static bool	check_if_anyone_died(t_data *data, long long now)
 		if (now >= deadline)
 		{
 			pthread_mutex_lock(&data->print_mutex);
-			printf("%lld %d is burnout\n", (now - data->simulation_start_time) / 1000LL, data->coders[i].id);
+			printf("%lld %d burned out\n", (now - data->simulation_start_time) / 1000LL, data->coders[i].id);
 			pthread_mutex_unlock(&data->print_mutex);
 			wake_up_all_coders(data);
 			return (true);

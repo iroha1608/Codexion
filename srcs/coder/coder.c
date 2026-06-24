@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:41:03 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 17:59:36 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 22:10:48 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,15 +98,22 @@ static void	perform_compile(t_coder *self)
 	precise_sleep(self->data->time_to_compile, self->data);
 }
 
-// """
-// Todo: debug, refactoringの時も短くても関数を切り分けたい
-// """
+/// """
+/// Todo: debug, refactoringの時も短くても関数を切り分けたい
+/// coderが一人の時
+/// """
 void	*coder_routine(void *arg)
 {
 	t_coder	*self;
 
 	self = (t_coder *)arg;
-	// coderが一人の時
+	pthread_mutex_lock(&self->data->time_mutex);
+	self->data->ready_count ++;
+	if (self->data->ready_count == self->data->num_coders)
+		pthread_cond_signal(&self->data->sv_cond);
+	while (!self->data->is_simulation_running)
+		pthread_cond_wait(&self->data->start_cond, &self->data->time_mutex);
+	pthread_mutex_unlock(&self->data->time_mutex);
 	if (self->data->num_coders == 1)
 	{
 		self->print_status(self, "has taken a dongle");

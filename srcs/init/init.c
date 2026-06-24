@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 19:10:40 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 21:28:11 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,15 @@ static bool	init_sys_mutex_2(t_data *data)
 		pthread_mutex_destroy(&data->time_mutex);
 		pthread_mutex_destroy(&data->print_mutex);
 		pthread_cond_destroy(&data->sv_cond);
+		return (false);
+	}
+	if (pthread_cond_init(&data->start_cond, NULL) != 0)
+	{
+		pthread_mutex_destroy(&data->scheduler_mutex);
+		pthread_mutex_destroy(&data->time_mutex);
+		pthread_mutex_destroy(&data->print_mutex);
+		pthread_cond_destroy(&data->sv_cond);
+		pthread_cond_destroy(&data->exit_cond);
 		return (false);
 	}
 	return (true);

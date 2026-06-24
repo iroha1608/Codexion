@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 22:46:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 16:27:59 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 21:18:01 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	rollback_system_mutexes(t_data *data)
 	pthread_mutex_destroy(&data->print_mutex);
 	pthread_cond_destroy(&data->sv_cond);
 	pthread_cond_destroy(&data->exit_cond);
+	pthread_cond_destroy(&data->start_cond);
 }
 
 // """
