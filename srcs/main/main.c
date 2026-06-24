@@ -6,12 +6,18 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:06:39 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 16:28:52 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 17:33:40 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// """
+//
+// """
 #include "../../hdrs/codexion.h"
 
+// """
+//
+// """
 int	main(int argc, char **argv)
 {
 	t_data	data;

@@ -1,9 +1,9 @@
-# --- Target ---
+# ----- Target -----
 TARGET		=	codexion
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -pthread -I$(HDR_DIR)
 
-# --- Directories ---
+# ----- Directories -----
 # Root Directory Name
 SRC_DIR		=	./srcs/
 OBJ_DIR		=	./objs/
@@ -14,8 +14,7 @@ MAIN_DIR		=	main/
 CODER_DIR		=	coder/
 SCHEDULER_DIR	=	scheduler/
 
-
-# --- Source Files ---
+# ----- Source Files -----
 SRCS		=	$(SRCS_MAIN) $(SRCS_CODER) $(SRCS_SCHEDULER)
 SRCS_MAIN	=	main.c \
 				init.c \
@@ -23,8 +22,9 @@ SRCS_MAIN	=	main.c \
 				heap.c \
 				parse.c \
 				utils.c \
-				print.c
-# SRCS_CODER	=
+				print.c \
+				arbiter.c
+SRCS_CODER	=	coder.c
 # SRCS_SCHEDULER	=
 
 # --- Object Files ---
@@ -35,7 +35,8 @@ HDR_NAME	=	codexion.h
 HDRS		=	$(addprefix $(HDR_DIR), $(HDR_NAME))
 
 vpath %.c	$(SRC_DIR) \
-			$(SRC_DIR)$(MAIN_DIR) 
+			$(SRC_DIR)$(MAIN_DIR) \
+			$(SRC_DIR)$(CODER_DIR) \
 
 # Mandatory Part
 all:	$(TARGET)

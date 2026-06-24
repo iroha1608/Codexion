@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 14:27:32 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 17:34:04 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,20 @@ long long	get_time(void);
 void		set_timespec(struct timespec *ts, long long time);
 void		precise_sleep(long long sleep_time, t_data *data);
 bool		ft_atol(const char *str, long long *result);
+
+// --------------- coder.c ---------------
+bool	coder_request_dongles(t_coder *self);
+void	coder_release_dongles(t_coder *self);
+void	*coder_routine(void *arg);
+// static	bool check_running(t_data *data)
+// static void	perform_compile(t_coder *self)
+
+// --------------- arbiter.c ---------------
+bool attempt_to_grab_dongles(t_coder *self, long long *cd_end);
+// static void init_avail_array(int *abail, t_data *data)
+// static void restore_heap(t_heap *heap, t_coder **tmp, int count)
+// static bool check_my_turn(t_coder *self, t_coder *c, int *avail, long long *cd_end)
+// static bool process_poped_coder(t_coder *self, t_coder *c, int *avail, long long *cd_end)
+
 
 #endif
