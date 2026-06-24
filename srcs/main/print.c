@@ -6,13 +6,17 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:46:42 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 23:03:27 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 14:27:00 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// """
+//
+// """
 #include "../../hdrs/codexion.h"
 
 // """
+//
 // """
 int	print_error(const char *msg)
 {
@@ -20,8 +24,8 @@ int	print_error(const char *msg)
 	return (1);
 }
 
-// Coder's method
 // """
+// Coder's method
 // """
 bool	coder_print_status(t_coder *self, const char *status)
 {
