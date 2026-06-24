@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 17:34:04 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 19:48:48 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ void		precise_sleep(long long sleep_time, t_data *data);
 bool		ft_atol(const char *str, long long *result);
 
 // --------------- coder.c ---------------
+// Coder's Method
 bool	coder_request_dongles(t_coder *self);
 void	coder_release_dongles(t_coder *self);
 void	*coder_routine(void *arg);
@@ -149,5 +150,14 @@ bool attempt_to_grab_dongles(t_coder *self, long long *cd_end);
 // static bool check_my_turn(t_coder *self, t_coder *c, int *avail, long long *cd_end)
 // static bool process_poped_coder(t_coder *self, t_coder *c, int *avail, long long *cd_end)
 
+// --------------- simulation.c ---------------
+void	wait_all_threads(t_data *data, int count);
+bool	start_simulation(t_data *data);
+
+// --------------- supervisor.c ---------------
+void	*supervisor_routine(void *arg);
+// static void	wake_up_all_coders(t_data *data)
+// static bool	check_if_anyone_died(t_data *data, long long now)
+// static bool	check_all_compiled(t_data *data)
 
 #endif

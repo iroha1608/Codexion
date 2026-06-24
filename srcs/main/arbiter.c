@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:40:55 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 17:35:57 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 17:51:53 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ bool attempt_to_grab_dongles(t_coder *self, long long *cd_end)
 		if (process_poped_coder(self, c, avail, cd_end))
 		{
 			restore_heap(self->data->wait_queue, tmp, count);
-			return (false);
+			return (true);
 		}
 	}
 	restore_heap(self->data->wait_queue, tmp, count);

@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:41:03 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 17:41:57 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 17:59:36 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,13 @@ void	*coder_routine(void *arg)
 	t_coder	*self;
 
 	self = (t_coder *)arg;
+	// coderが一人の時
+	if (self->data->num_coders == 1)
+	{
+		self->print_status(self, "has taken a dongle");
+		precise_sleep(self->data->time_to_burnout + 1000LL, self->data);
+		return (NULL);
+	}
 	if (self->id % 2 == 0)
 		precise_sleep(1000, self->data);
 	while (check_running(self->data))

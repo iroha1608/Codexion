@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 16:26:27 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 19:10:40 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,12 @@ static bool init_coders_and_conds(t_data *data)
 
 		data->coders[i].left_dongle_id = i;
 		data->coders[i].right_dongle_id = (i + 1) % data->num_coders;
+
 		// Actor method
 		data->coders[i].print_status = coder_print_status;
+		data->coders[i].request_dongles = coder_request_dongles;
+		data->coders[i].release_dongles = coder_release_dongles;
+		data->coders[i].run = coder_routine;
 		i ++;
 	}
 	return (true);

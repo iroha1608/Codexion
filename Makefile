@@ -23,7 +23,9 @@ SRCS_MAIN	=	main.c \
 				parse.c \
 				utils.c \
 				print.c \
-				arbiter.c
+				arbiter.c \
+				simulation.c \
+				supervisor.c
 SRCS_CODER	=	coder.c
 # SRCS_SCHEDULER	=
 
