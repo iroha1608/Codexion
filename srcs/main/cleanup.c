@@ -6,15 +6,17 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 22:46:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 23:03:24 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 16:27:59 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // """
+//
 // """
 #include "../../hdrs/codexion.h"
 
 // """
+// Initialize success system's Mutex/Cond is destroy.
 // """
 void	rollback_system_mutexes(t_data *data)
 {
@@ -26,13 +28,14 @@ void	rollback_system_mutexes(t_data *data)
 }
 
 // """
+//
 // """
 void	rollback_conds(t_data *data, int count)
 {
 	int	i;
 
 	i = 0;
-	while (i < data->num_coders)
+	while (i < count)
 	{
 		pthread_cond_destroy(&data->dongle_conds[i]);
 		i ++;
@@ -40,6 +43,7 @@ void	rollback_conds(t_data *data, int count)
 }
 
 // """
+//
 // """
 void	cleanup_data(t_data *data)
 {
@@ -48,13 +52,13 @@ void	cleanup_data(t_data *data)
 		free_heap(data->wait_queue);
 	if (data->dongle_conds)
 	{
-		rollbac_conds(data, data->dongle_coders);
+		rollback_conds(data, data->num_coders);
 		free(data->dongle_conds);
 	}
 	if (data->coders)
 		free(data->coders);
 	if (data->dongles)
 		free(data->dongles);
-	rollback_system_mutex(data);
+	rollback_system_mutexes(data);
 }
 

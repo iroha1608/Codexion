@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 22:36:06 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 14:27:32 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,16 @@ bool	parse_arguments(int argc, char **argv, t_data *data);
 // static bool assign_arguments(char **argv, t_data *data);
 
 // --------------- init.c ---------------
-void		cleanup_data(t_data *data);
-// int			init_data(t_data *data);
+int	init_data(t_data *data);
+// static bool	init_sys_mutex_1(t_data *data);
+// static bool	init_sys_mutex_2(t_data *data);
+// static bool allocate_arrays(t_data *data);
+// static bool init_coders_and_conds(t_data *data);
+
+// --------------- cleanup.c ---------------
+void	rollback_system_mutexes(t_data *data);
+void	rollback_conds(t_data *data, int count);
+void	cleanup_data(t_data *data);
 
 // --------------- heap.c ---------------
 int			is_higher_priority(t_coder *a, t_coder *b, int scheduler_type);
