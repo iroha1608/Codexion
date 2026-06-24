@@ -11,23 +11,28 @@ HDR_DIR		=	./hdrs/
 
 # Sub Directory Name
 MAIN_DIR		=	main/
+INIT_DIR		=	init/
+CORE_DIR		=	core/
+UTILS_DIR		=	utils/
 CODER_DIR		=	coder/
-SCHEDULER_DIR	=	scheduler/
 
 # ----- Source Files -----
-SRCS		=	$(SRCS_MAIN) $(SRCS_CODER) $(SRCS_SCHEDULER)
+SRCS		=	$(SRCS_MAIN) \
+				$(SRCS_INIT) \
+				$(SRCS_CORE) \
+				$(SRCS_UTILS) \
+				$(SRCS_CODER)
 SRCS_MAIN	=	main.c \
-				init.c \
-				cleanup.c \
-				heap.c \
+				simulation.c
+SRCS_INIT	=	init.c \
 				parse.c \
-				utils.c \
-				print.c \
-				arbiter.c \
-				simulation.c \
+				cleanup.c
+SRCS_CORE	=	arbiter.c \
 				supervisor.c
+SRCS_UTILS	=	utils.c \
+				heap.c \
+				print.c
 SRCS_CODER	=	coder.c
-# SRCS_SCHEDULER	=
 
 # --- Object Files ---
 OBJS		=	$(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
@@ -38,6 +43,9 @@ HDRS		=	$(addprefix $(HDR_DIR), $(HDR_NAME))
 
 vpath %.c	$(SRC_DIR) \
 			$(SRC_DIR)$(MAIN_DIR) \
+			$(SRC_DIR)$(INIT_DIR) \
+			$(SRC_DIR)$(CORE_DIR) \
+			$(SRC_DIR)$(UTILS_DIR) \
 			$(SRC_DIR)$(CODER_DIR) \
 
 # Mandatory Part

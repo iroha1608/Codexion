@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 19:48:48 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/24 20:17:34 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,26 +98,53 @@ struct s_data {
 	pthread_mutex_t	print_mutex;
 };
 
-// --------------- main.c ---------------
+// ============================== srcs/main ==============================
+// ------------------------------ main.c ------------------------------
 
-// --------------- parse.c ---------------
-bool	parse_arguments(int argc, char **argv, t_data *data);
-// static bool parse_scheduler(char *arg, t_data *data);
-// static bool assign_arguments(char **argv, t_data *data);
+// ------------------------------ simulation.c ------------------------------
+void	wait_all_threads(t_data *data, int count);
+bool	start_simulation(t_data *data);
 
-// --------------- init.c ---------------
+// ============================== srcs/init ==============================
+// ------------------------------ init.c ------------------------------
 int	init_data(t_data *data);
 // static bool	init_sys_mutex_1(t_data *data);
 // static bool	init_sys_mutex_2(t_data *data);
 // static bool allocate_arrays(t_data *data);
 // static bool init_coders_and_conds(t_data *data);
+//
+// ------------------------------ parse.c ------------------------------
+bool	parse_arguments(int argc, char **argv, t_data *data);
+// static bool parse_scheduler(char *arg, t_data *data);
+// static bool assign_arguments(char **argv, t_data *data);
 
-// --------------- cleanup.c ---------------
+// ------------------------------ cleanup.c ------------------------------
 void	rollback_system_mutexes(t_data *data);
 void	rollback_conds(t_data *data, int count);
 void	cleanup_data(t_data *data);
 
-// --------------- heap.c ---------------
+// ============================== srcs/core ==============================
+// ------------------------------ arbiter.c ------------------------------
+bool attempt_to_grab_dongles(t_coder *self, long long *cd_end);
+// static void init_avail_array(int *abail, t_data *data)
+// static void restore_heap(t_heap *heap, t_coder **tmp, int count)
+// static bool check_my_turn(t_coder *self, t_coder *c, int *avail, long long *cd_end)
+// static bool process_poped_coder(t_coder *self, t_coder *c, int *avail, long long *cd_end)
+
+// ------------------------------ supervisor.c ------------------------------
+void	*supervisor_routine(void *arg);
+// static void	wake_up_all_coders(t_data *data)
+// static bool	check_if_anyone_died(t_data *data, long long now)
+// static bool	check_all_compiled(t_data *data)
+
+// ============================== srcs/utils ==============================
+// ------------------------------ utils.c ------------------------------
+long long	get_time(void);
+void		set_timespec(struct timespec *ts, long long time);
+void		precise_sleep(long long sleep_time, t_data *data);
+bool		ft_atol(const char *str, long long *result);
+
+// ------------------------------ heap.c ------------------------------
 int			is_higher_priority(t_coder *a, t_coder *b, int scheduler_type);
 t_heap		*init_heap(int capacity, int scheduler_type);
 void		free_heap(t_heap *heap);
@@ -125,39 +152,17 @@ void		push_heap(t_heap *heap, t_coder *coder);
 t_coder		*pop_heap(t_heap *heap);
 int			is_empty_heap(t_heap *heap);
 
-// --------------- print.c ---------------
+// ------------------------------ print.c ------------------------------
 int			print_error(const char *msg);
 bool		coder_print_status(t_coder *self, const char *status);
 
-// --------------- utils.c ---------------
-long long	get_time(void);
-void		set_timespec(struct timespec *ts, long long time);
-void		precise_sleep(long long sleep_time, t_data *data);
-bool		ft_atol(const char *str, long long *result);
-
-// --------------- coder.c ---------------
+// ============================== srcs/coder ==============================
+// ------------------------------ coder.c ------------------------------
 // Coder's Method
 bool	coder_request_dongles(t_coder *self);
 void	coder_release_dongles(t_coder *self);
 void	*coder_routine(void *arg);
 // static	bool check_running(t_data *data)
 // static void	perform_compile(t_coder *self)
-
-// --------------- arbiter.c ---------------
-bool attempt_to_grab_dongles(t_coder *self, long long *cd_end);
-// static void init_avail_array(int *abail, t_data *data)
-// static void restore_heap(t_heap *heap, t_coder **tmp, int count)
-// static bool check_my_turn(t_coder *self, t_coder *c, int *avail, long long *cd_end)
-// static bool process_poped_coder(t_coder *self, t_coder *c, int *avail, long long *cd_end)
-
-// --------------- simulation.c ---------------
-void	wait_all_threads(t_data *data, int count);
-bool	start_simulation(t_data *data);
-
-// --------------- supervisor.c ---------------
-void	*supervisor_routine(void *arg);
-// static void	wake_up_all_coders(t_data *data)
-// static bool	check_if_anyone_died(t_data *data, long long now)
-// static bool	check_all_compiled(t_data *data)
 
 #endif

@@ -30,6 +30,30 @@
 
 ## 💡1. 概要
 ## 📁2. ファイル構成
+```
+Codexion/
+├── Makefile
+├── hdrs/
+│   └── codexion.h
+└── srcs/
+    ├── main/       (プログラムの開始と実行フロー制御)
+    │   ├── main.c
+    │   └── simulation.c
+    ├── init/       (引数解析、初期化、後片付け)
+    │   ├── parse.c
+    │   ├── init.c
+    │   └── cleanup.c
+    ├── core/       (シミュレーションの核となる管理者)
+    │   ├── arbiter.c
+    │   └── supervisor.c
+    ├── utils/      (ユーティリティ、データ構造、出力関数)
+    │   ├── utils.c
+    │   ├── print.c
+    │   └── heap.c
+    └── coder/      (コーダーのライフサイクルと振る舞い)
+        └── coder.c
+```
+
 ## ✅3. 手順
 ## ⛏4. 追加要件
 ## 📃5. 入出力例
