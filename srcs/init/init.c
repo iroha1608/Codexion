@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 14:47:45 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 15:37:11 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,21 @@ static bool	init_sys_mutex_2(t_data *data)
 	return (true);
 }
 
+///
+/// Memory allocate sita hennsuu nomi free.
+///
+static void	free_arrays(t_data *data)
+{
+	if (data->coders)
+		free(data->coders);
+	if (data->dongles)
+		free(data->dongles);
+	if (data->dongle_conds)
+		free(data->dongle_conds);
+}
+
 // """
-// Coders no kazu bun coder, dongle, dongle_cond no memory allocate.
+// Coder no kazu bun coder, dongle, dongle_cond no memory allocate.
 // """
 static bool	allocate_arrays(t_data *data)
 {
@@ -78,12 +91,7 @@ static bool	allocate_arrays(t_data *data)
 	data->dongle_conds = malloc(data->num_coders * sizeof(pthread_cond_t));
 	if (!data->coders || !data->dongles || !data->dongle_conds)
 	{
-		if (data->coders)
-			free(data->coders);
-		if (data->dongles)
-			free(data->dongles);
-		if (data->dongle_conds)
-			free(data->dongle_conds);
+		free_arrays(data);
 		return (false);
 	}
 	return (true);
@@ -127,27 +135,23 @@ static bool	init_coders_and_conds(t_data *data)
 // """
 int	init_data(t_data *data)
 {
-	if (!init_sys_mutex_1(data) || !init_sys_mutex_2(data))
+	if (init_sys_mutex_1(data) == false|| !init_sys_mutex_2(data) == false)
 		return (false);
-	if (!allocate_arrays(data))
+	if (allocate_arrays(data) == false)
 	{
 		rollback_system_mutexes(data);
 		return (false);
 	}
 	if (!init_coders_and_conds(data))
 	{
-		free(data->coders);
-		free(data->dongles);
-		free(data->dongle_conds);
+		free_arrays(data);
 		rollback_system_mutexes(data);
 		return (false);
 	}
 	data->wait_queue = init_heap(data->num_coders, data->scheduler_type);
 	if (!data->wait_queue)
 	{
-		free(data->coders);
-		free(data->dongles);
-		free(data->dongle_conds);
+		free_arrays(data);
 		rollback_conds(data, data->num_coders);
 		rollback_system_mutexes(data);
 		return (false);

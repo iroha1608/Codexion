@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 15:03:03 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 15:14:56 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ struct s_coder
 
 	long long	last_compile_start;
 	int			compile_count;
-	long long	request_time;
-	long long	deadline;
+	long long	request_time; // FIFO
+	long long	deadline; // EDF
 	int			in_queue;
 	t_data		*data;
 
