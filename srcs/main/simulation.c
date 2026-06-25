@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 17:51:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 22:09:51 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 14:49:41 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	wait_all_threads(t_data *data, int count)
 }
 
 // """
+// 作成済みthreadの回収
 // Todo: createのエラーハンドリングも別関数に分ける。
 // """
 bool	start_simulation(t_data *data)
@@ -41,7 +42,8 @@ bool	start_simulation(t_data *data)
 	i = 0;
 	while (i < data->num_coders)
 	{
-		if (pthread_create(&data->coders[i].thread_id, NULL, data->coders[i].run, &data->coders[i]) != 0)
+		if (pthread_create(&data->coders[i].thread_id, NULL,
+				data->coders[i].run, &data->coders[i]) != 0)
 		{
 			print_error("Failed to create thread.");
 			pthread_mutex_lock(&data->time_mutex);
@@ -49,7 +51,7 @@ bool	start_simulation(t_data *data)
 			pthread_cond_broadcast(&data->start_cond);
 			pthread_cond_broadcast(&data->exit_cond);
 			pthread_mutex_unlock(&data->time_mutex);
-			wait_all_threads(data, i); // 作成済みthreadの回収
+			wait_all_threads(data, i);
 			return (false);
 		}
 		i ++;
@@ -67,6 +69,5 @@ bool	start_simulation(t_data *data)
 	data->is_simulation_running = true;
 	pthread_cond_broadcast(&data->start_cond);
 	pthread_mutex_unlock(&data->time_mutex);
-
 	return (true);
 }

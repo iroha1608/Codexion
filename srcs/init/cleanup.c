@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 22:46:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 21:18:01 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 14:45:18 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,10 @@ void	rollback_conds(t_data *data, int count)
 }
 
 // """
-//
+// cleanup queue
 // """
 void	cleanup_data(t_data *data)
 {
-	// cleanup queue
 	if (data->wait_queue)
 		free_heap(data->wait_queue);
 	if (data->dongle_conds)
@@ -62,4 +61,3 @@ void	cleanup_data(t_data *data)
 		free(data->dongles);
 	rollback_system_mutexes(data);
 }
-

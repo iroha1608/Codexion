@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:34:51 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 14:27:01 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 14:50:44 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ long long	get_time(void)
 // """
 // micro second -> timespec
 // """
-void		set_timespec(struct timespec *ts, long long time)
+void	set_timespec(struct timespec *ts, long long time)
 {
 	ts->tv_sec = time / 1000000LL;
 	ts->tv_nsec = (time % 1000000LL) * 1000LL;
@@ -38,10 +38,10 @@ void		set_timespec(struct timespec *ts, long long time)
 // """
 // No huristic. use exit_cond wait timeout.
 // """
-void		precise_sleep(long long sleep_time, t_data *data)
+void	precise_sleep(long long sleep_time, t_data *data)
 {
 	struct timespec	ts;
-	long long	target_time;
+	long long		target_time;
 
 	target_time = get_time() + sleep_time;
 	set_timespec(&ts, target_time);
@@ -53,7 +53,7 @@ void		precise_sleep(long long sleep_time, t_data *data)
 // """
 // validate overflow suuti hennkann
 // """
-bool		ft_atol(const char *str, long long *result)
+bool	ft_atol(const char *str, long long *result)
 {
 	int			i;
 	long long	ret;

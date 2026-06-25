@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 18:43:07 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/23 23:03:25 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 14:53:50 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,17 @@
 // """
 #include "../../hdrs/codexion.h"
 
+// """
+// FIFO, EDF
+// """
 int	is_higher_priority(t_coder *a, t_coder *b, int scheduler_type)
 {
-	// FIFO
 	if (scheduler_type == 0)
 	{
 		if (a->request_time != b->request_time)
 			return (a->request_time < b->request_time);
 		return (a->id < b->id);
 	}
-	// EDF
 	else
 	{
 		if (a->deadline != b->deadline)
@@ -67,8 +68,8 @@ void	free_heap(t_heap *heap)
 
 void	push_heap(t_heap *heap, t_coder *coder)
 {
-	int	i;
-	int	parent;
+	int		i;
+	int		parent;
 	t_coder	*temp;
 
 	if (heap->size >= heap->capacity)
@@ -79,7 +80,8 @@ void	push_heap(t_heap *heap, t_coder *coder)
 	while (i != 0)
 	{
 		parent = (i - 1) / 2;
-		if (is_higher_priority(heap->data[i], heap->data[parent], heap->scheduler_type))
+		if (is_higher_priority(
+				heap->data[i], heap->data[parent], heap->scheduler_type))
 		{
 			temp = heap->data[i];
 			heap->data[i] = heap->data[parent];
@@ -87,18 +89,21 @@ void	push_heap(t_heap *heap, t_coder *coder)
 			i = parent;
 		}
 		else
-			break;
+			break ;
 	}
 }
 
+///
+///
+///
 t_coder	*pop_heap(t_heap *heap)
 {
 	t_coder	*root;
 	t_coder	*temp;
-	int	i;
-	int	left;
-	int	right;
-	int smallest;
+	int		i;
+	int		left;
+	int		right;
+	int		smallest;
 
 	if (heap->size <= 0)
 		return (NULL);
@@ -113,9 +118,13 @@ t_coder	*pop_heap(t_heap *heap)
 		left = 2 * i + 1;
 		right = 2 * i + 2;
 		smallest = i;
-		if (left < heap->size && is_higher_priority(heap->data[left], heap->data[smallest], heap->scheduler_type))
+		if (left < heap->size
+			&& is_higher_priority(
+				heap->data[left], heap->data[smallest], heap->scheduler_type))
 			smallest = left;
-		if (right < heap->size && is_higher_priority(heap->data[right], heap->data[smallest], heap->scheduler_type))
+		if (right < heap->size
+			&& is_higher_priority(
+				heap->data[right], heap->data[smallest], heap->scheduler_type))
 			smallest = right;
 		if (smallest != i)
 		{
@@ -125,7 +134,7 @@ t_coder	*pop_heap(t_heap *heap)
 			i = smallest;
 		}
 		else
-			break;
+			break ;
 	}
 	return (root);
 }

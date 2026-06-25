@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:06:39 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 19:48:15 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 14:48:31 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@
 #include "../../hdrs/codexion.h"
 
 // """
+// 全コーダーをjoinして終了を待つ。
 // Todo: スーパーバイザー立ち上げの実装。
 // """
 int	main(int argc, char **argv)
 {
-	t_data	data;
+	t_data		data;
 	pthread_t	sv_thread;
 
 	memset(&data, 0, sizeof(t_data));
@@ -43,8 +44,6 @@ int	main(int argc, char **argv)
 	}
 	else
 		pthread_join(sv_thread, NULL);
-
-	// 全コーダーをjoinして終了を待つ。
 	wait_all_threads(&data, data.num_coders);
 	cleanup_data(&data);
 	return (0);

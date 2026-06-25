@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 21:16:00 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 15:03:03 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,21 +27,24 @@ typedef struct s_coder	t_coder;
 typedef struct s_heap	t_heap;
 
 // Dongle state
-typedef enum e_dongle_state {
+typedef enum e_dongle_state
+{
 	AVAILABLE,
 	IN_USE,
 	COOLDOWN
 }	t_dongle_state;
 
 // Dongle
-typedef struct s_dongle {
+typedef struct s_dongle
+{
 	int				id;
 	t_dongle_state	state;
 	long long		available_time;
 }	t_dongle;
 
 // Actor: Coder
-struct s_coder {
+struct s_coder
+{
 	int			id; // 1 ~ N
 	pthread_t	thread_id;
 	int			left_dongle_id;
@@ -49,8 +52,8 @@ struct s_coder {
 
 	long long	last_compile_start;
 	int			compile_count;
-	long long	request_time; // FIFO
-	long long	deadline; // EDF
+	long long	request_time;
+	long long	deadline;
 	int			in_queue;
 	t_data		*data;
 
@@ -61,7 +64,8 @@ struct s_coder {
 };
 
 // Heap (Queue)
-struct s_heap {
+struct s_heap
+{
 	t_coder	**data;
 	int		size;
 	int		capacity;
@@ -69,30 +73,27 @@ struct s_heap {
 };
 
 // System Data
-struct s_data {
+struct s_data
+{
 	// Argument data
-	int			num_coders;
-	long long	time_to_burnout;
-	long long	time_to_compile;
-	long long	time_to_debug;
-	long long	time_to_refactor;
-	int			num_compiles_required;
-	long long	dongle_cooldown;
-	int			scheduler_type; // 0 : FIFO, 1 : EDF
-
+	int				num_coders;
+	long long		time_to_burnout;
+	long long		time_to_compile;
+	long long		time_to_debug;
+	long long		time_to_refactor;
+	int				num_compiles_required;
+	long long		dongle_cooldown;
+	int				scheduler_type; // 0 : FIFO, 1 : EDF
 	// running state
-	long long	simulation_start_time;
-	bool		is_simulation_running; // 0 : All thread complete
-	bool		init_error;
-
-	int	ready_count; // Ready complete thread count
+	long long		simulation_start_time;
+	bool			is_simulation_running; // 0 : All thread complete
+	bool			init_error;
+	int				ready_count; // Ready complete thread count
 	pthread_cond_t	start_cond; // issei start you no joukenhensuu
-
 	// Array
-	t_coder		*coders;
-	t_dongle	*dongles;
-	t_heap		*wait_queue; // Queue
-
+	t_coder			*coders;
+	t_dongle		*dongles;
+	t_heap			*wait_queue; // Queue
 	pthread_mutex_t	scheduler_mutex;
 	pthread_cond_t	*dongle_conds;
 	pthread_mutex_t	time_mutex;
@@ -105,37 +106,39 @@ struct s_data {
 // ------------------------------ main.c ------------------------------
 
 // ------------------------------ simulation.c ------------------------------
-void	wait_all_threads(t_data *data, int count);
-bool	start_simulation(t_data *data);
+void		wait_all_threads(t_data *data, int count);
+bool		start_simulation(t_data *data);
 
 // ============================== srcs/init ==============================
 // ------------------------------ init.c ------------------------------
-int	init_data(t_data *data);
+int			init_data(t_data *data);
 // static bool	init_sys_mutex_1(t_data *data);
 // static bool	init_sys_mutex_2(t_data *data);
 // static bool allocate_arrays(t_data *data);
 // static bool init_coders_and_conds(t_data *data);
 //
 // ------------------------------ parse.c ------------------------------
-bool	parse_arguments(int argc, char **argv, t_data *data);
+bool		parse_arguments(int argc, char **argv, t_data *data);
 // static bool parse_scheduler(char *arg, t_data *data);
 // static bool assign_arguments(char **argv, t_data *data);
 
 // ------------------------------ cleanup.c ------------------------------
-void	rollback_system_mutexes(t_data *data);
-void	rollback_conds(t_data *data, int count);
-void	cleanup_data(t_data *data);
+void		rollback_system_mutexes(t_data *data);
+void		rollback_conds(t_data *data, int count);
+void		cleanup_data(t_data *data);
 
 // ============================== srcs/core ==============================
 // ------------------------------ arbiter.c ------------------------------
-bool attempt_to_grab_dongles(t_coder *self, long long *cd_end);
+bool		attempt_to_grab_dongles(t_coder *self, long long *cd_end);
 // static void init_avail_array(int *abail, t_data *data)
 // static void restore_heap(t_heap *heap, t_coder **tmp, int count)
-// static bool check_my_turn(t_coder *self, t_coder *c, int *avail, long long *cd_end)
-// static bool process_poped_coder(t_coder *self, t_coder *c, int *avail, long long *cd_end)
+// static bool check_my_turn(
+// 		t_coder *self, t_coder *c, int *avail, long long *cd_end)
+// static bool process_poped_coder(
+// 		t_coder *self, t_coder *c, int *avail, long long *cd_end)
 
 // ------------------------------ supervisor.c ------------------------------
-void	*supervisor_routine(void *arg);
+void		*supervisor_routine(void *arg);
 // static void	wake_up_all_coders(t_data *data)
 // static bool	check_if_anyone_died(t_data *data, long long now)
 // static bool	check_all_compiled(t_data *data)
@@ -162,9 +165,9 @@ bool		coder_print_status(t_coder *self, const char *status);
 // ============================== srcs/coder ==============================
 // ------------------------------ coder.c ------------------------------
 // Coder's Method
-bool	coder_request_dongles(t_coder *self);
-void	coder_release_dongles(t_coder *self);
-void	*coder_routine(void *arg);
+bool		coder_request_dongles(t_coder *self);
+void		coder_release_dongles(t_coder *self);
+void		*coder_routine(void *arg);
 // static	bool check_running(t_data *data)
 // static void	perform_compile(t_coder *self)
 

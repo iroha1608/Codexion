@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:54:45 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 14:26:56 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 14:44:43 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // """
 // Scheduler argument character check "fifo" or "edf".
 // """
-static bool parse_scheduler(char *arg, t_data *data)
+static bool	parse_scheduler(char *arg, t_data *data)
 {
 	if (strcmp(arg, "fifo") == 0)
 		data->scheduler_type = 0;
@@ -32,7 +32,7 @@ static bool parse_scheduler(char *arg, t_data *data)
 // """
 // all arguments
 // """
-static bool assign_arguments(char **argv, t_data *data)
+static bool	assign_arguments(char **argv, t_data *data)
 {
 	int			i;
 	long long	tmp[7];
@@ -44,7 +44,6 @@ static bool assign_arguments(char **argv, t_data *data)
 			return (false);
 		i ++;
 	}
-
 	data->num_coders = (int)tmp[0];
 	data->time_to_burnout = tmp[1] * 1000LL;
 	data->time_to_compile = tmp[2] * 1000LL;

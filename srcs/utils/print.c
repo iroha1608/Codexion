@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:46:42 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 14:27:00 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 14:51:07 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	print_error(const char *msg)
 
 // """
 // Coder's method
+// fprintf is failed, all coder destroy.
 // """
 bool	coder_print_status(t_coder *self, const char *status)
 {
@@ -37,7 +38,6 @@ bool	coder_print_status(t_coder *self, const char *status)
 	pthread_mutex_lock(&self->data->time_mutex);
 	is_running = self->data->is_simulation_running;
 	pthread_mutex_unlock(&self->data->time_mutex);
-	// fprintf is failed, all coder destroy.
 	if (is_running)
 	{
 		now_micro = get_time() - self->data->simulation_start_time;

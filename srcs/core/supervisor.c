@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 19:12:57 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 20:35:18 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 14:43:47 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ static void	wake_up_all_coders(t_data *data)
 // """
 static bool	check_if_anyone_died(t_data *data, long long now)
 {
+	int			i;
 	long long	deadline;
-	int	i;
 
 	i = 0;
 	while (i < data->num_coders)
@@ -47,7 +47,9 @@ static bool	check_if_anyone_died(t_data *data, long long now)
 		if (now >= deadline)
 		{
 			pthread_mutex_lock(&data->print_mutex);
-			printf("%lld %d burned out\n", (now - data->simulation_start_time) / 1000LL, data->coders[i].id);
+			printf("%lld %d burned out\n",
+				(now - data->simulation_start_time) / 1000LL,
+				data->coders[i].id);
 			pthread_mutex_unlock(&data->print_mutex);
 			wake_up_all_coders(data);
 			return (true);
@@ -82,20 +84,20 @@ static bool	check_all_compiled(t_data *data)
 // """
 void	*supervisor_routine(void *arg)
 {
-	t_data	*data;
-	long long	now;
-	long long	closest;
-	long long	dl;
+	t_data			*data;
+	long long		now;
+	long long		closest;
+	long long		dl;
 	struct timespec	ts;
-	int	i;
+	int				i;
 
 	data = (t_data *)arg;
 	pthread_mutex_lock(&data->time_mutex);
 	while (data->is_simulation_running)
 	{
-		now =get_time();
+		now = get_time();
 		if (check_all_compiled(data) || check_if_anyone_died(data, now))
-			break;
+			break ;
 		closest = -1;
 		i = 0;
 		while (i < data->num_coders)

@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/24 21:28:11 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 14:47:45 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,25 +71,28 @@ static bool	init_sys_mutex_2(t_data *data)
 // """
 // Coders no kazu bun coder, dongle, dongle_cond no memory allocate.
 // """
-static bool allocate_arrays(t_data *data)
+static bool	allocate_arrays(t_data *data)
 {
 	data->coders = malloc(data->num_coders * sizeof(t_coder));
 	data->dongles = malloc(data->num_coders * sizeof(t_dongle));
 	data->dongle_conds = malloc(data->num_coders * sizeof(pthread_cond_t));
 	if (!data->coders || !data->dongles || !data->dongle_conds)
 	{
-		if (data->coders) free(data->coders);
-		if (data->dongles) free(data->dongles);
-		if (data->dongle_conds) free(data->dongle_conds);
+		if (data->coders)
+			free(data->coders);
+		if (data->dongles)
+			free(data->dongles);
+		if (data->dongle_conds)
+			free(data->dongle_conds);
 		return (false);
 	}
 	return (true);
 }
 
 // ""
-//
+// print_status, request_dongles, release_dongles, run is Actor method.
 // ""
-static bool init_coders_and_conds(t_data *data)
+static bool	init_coders_and_conds(t_data *data)
 {
 	int	i;
 
@@ -104,15 +107,11 @@ static bool init_coders_and_conds(t_data *data)
 		data->dongles[i].id = i;
 		data->dongles[i].state = AVAILABLE;
 		data->dongles[i].available_time = 0;
-
 		data->coders[i].id = i + 1;
 		data->coders[i].compile_count = 0;
 		data->coders[i].data = data;
-
 		data->coders[i].left_dongle_id = i;
 		data->coders[i].right_dongle_id = (i + 1) % data->num_coders;
-
-		// Actor method
 		data->coders[i].print_status = coder_print_status;
 		data->coders[i].request_dongles = coder_request_dongles;
 		data->coders[i].release_dongles = coder_release_dongles;
@@ -123,11 +122,11 @@ static bool init_coders_and_conds(t_data *data)
 }
 
 // """
+	// Initialize queue
 // Todo: data->coders/dongles/dongle_conds のfreeは1関数にまとめて呼び出す。
 // """
 int	init_data(t_data *data)
 {
-	// Initialize queue
 	if (!init_sys_mutex_1(data) || !init_sys_mutex_2(data))
 		return (false);
 	if (!allocate_arrays(data))
