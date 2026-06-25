@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 15:37:11 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 16:38:12 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ static bool	init_coders_and_conds(t_data *data)
 // """
 int	init_data(t_data *data)
 {
-	if (init_sys_mutex_1(data) == false|| !init_sys_mutex_2(data) == false)
+	if (init_sys_mutex_1(data) == false || init_sys_mutex_2(data) == false)
 		return (false);
 	if (allocate_arrays(data) == false)
 	{

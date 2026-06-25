@@ -6,19 +6,33 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:41:03 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 14:39:37 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 16:59:09 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// """
-//
-// """
+/// """
+///
+/// """
 #include "../../hdrs/codexion.h"
 
-// """
-//
-// """
-static	bool	check_running(t_data *data)
+/// """
+///
+/// """
+static void	wait_for_start_signal(t_coder *self)
+{
+	pthread_mutex_lock(&self->data->time_mutex);
+	self->data->ready_count ++;
+	if (self->data->ready_count == self->data->num_coders)
+		pthread_cond_signal(&self->data->sv_cond);
+	while (!self->data->is_simulation_running)
+		pthread_cond_wait(&self->data->start_cond, &self->data->time_mutex);
+	pthread_mutex_unlock(&self->data->time_mutex);
+}
+
+/// """
+///
+/// """
+bool	check_running(t_data *data)
 {
 	bool	running;
 
@@ -28,69 +42,9 @@ static	bool	check_running(t_data *data)
 	return (running);
 }
 
-// """
-//
-// """
-bool	coder_request_dongles(t_coder *self)
-{
-	long long		cd_end;
-	struct timespec	ts;
-
-	pthread_mutex_lock(&self->data->scheduler_mutex);
-	self->request_time = get_time();
-	pthread_mutex_lock(&self->data->time_mutex);
-	self->deadline = self->last_compile_start + self->data->time_to_burnout;
-	pthread_mutex_unlock(&self->data->time_mutex);
-	self->in_queue = 1;
-	push_heap(self->data->wait_queue, self);
-	while (check_running(self->data))
-	{
-		if (attempt_to_grab_dongles(self, &cd_end))
-			break ;
-		if (cd_end > 0)
-		{
-			set_timespec(&ts, cd_end);
-			pthread_cond_timedwait(
-				&self->data->dongle_conds[self->id - 1],
-				&self->data->scheduler_mutex, &ts);
-		}
-		else
-			pthread_cond_wait(
-				&self->data->dongle_conds[self->id - 1],
-				&self->data->scheduler_mutex);
-	}
-	pthread_mutex_unlock(&self->data->scheduler_mutex);
-	return (check_running(self->data));
-}
-
-// """
-//
-// """
-void	coder_release_dongles(t_coder *self)
-{
-	int			i;
-	long long	now_micro;
-
-	pthread_mutex_lock(&self->data->scheduler_mutex);
-	now_micro = get_time();
-	self->data->dongles[self->left_dongle_id].state = AVAILABLE;
-	self->data->dongles[self->left_dongle_id].available_time = (
-			now_micro + self->data->dongle_cooldown);
-	self->data->dongles[self->right_dongle_id].state = AVAILABLE;
-	self->data->dongles[self->right_dongle_id].available_time = (
-			now_micro + self->data->dongle_cooldown);
-	i = 0;
-	while (i < self->data->num_coders)
-	{
-		pthread_cond_signal(&self->data->dongle_conds[i]);
-		i++;
-	}
-	pthread_mutex_unlock(&self->data->scheduler_mutex);
-}
-
-// """
-//
-// """
+/// """
+///
+/// """
 static void	perform_compile(t_coder *self)
 {
 	self->print_status(self, "has taken a dongle");
@@ -105,21 +59,26 @@ static void	perform_compile(t_coder *self)
 }
 
 /// """
-/// Todo: debug, refactoringの時も短くても関数を切り分けたい
-/// coderが一人の時
+///
+/// """
+static void	perform_debug_and_refactor(t_coder *self)
+{
+	self->print_status(self, "is debugging");
+	precise_sleep(self->data->time_to_debug, self->data);
+	self->print_status(self, "is refactoring");
+	precise_sleep(self->data->time_to_refactor, self->data);
+}
+
+/// """
+/// - [x] Todo: debug, refactoringの時も短くても関数を切り分けたい
+/// coderが一人の時, 偶数の時,
 /// """
 void	*coder_routine(void *arg)
 {
 	t_coder	*self;
 
 	self = (t_coder *)arg;
-	pthread_mutex_lock(&self->data->time_mutex);
-	self->data->ready_count ++;
-	if (self->data->ready_count == self->data->num_coders)
-		pthread_cond_signal(&self->data->sv_cond);
-	while (!self->data->is_simulation_running)
-		pthread_cond_wait(&self->data->start_cond, &self->data->time_mutex);
-	pthread_mutex_unlock(&self->data->time_mutex);
+	wait_for_start_signal(self);
 	if (self->data->num_coders == 1)
 	{
 		self->print_status(self, "has taken a dongle");
@@ -137,10 +96,7 @@ void	*coder_routine(void *arg)
 			break ;
 		perform_compile(self);
 		self->release_dongles(self);
-		self->print_status(self, "is debugging");
-		precise_sleep(self->data->time_to_debug, self->data);
-		self->print_status(self, "is refactoring");
-		precise_sleep(self->data->time_to_refactor, self->data);
+		perform_debug_and_refactor(self);
 	}
 	return (NULL);
 }

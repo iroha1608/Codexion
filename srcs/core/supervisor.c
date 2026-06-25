@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 19:12:57 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 14:43:47 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/25 16:37:24 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,24 @@ static bool	check_all_compiled(t_data *data)
 	return (true);
 }
 
+static long long	get_closest_dl(t_data *data)
+{
+	long long		closest;
+	long long		dl;
+	int				i;
+
+	closest = -1;
+	i = 0;
+	while (i < data->num_coders)
+	{
+		dl = data->coders[i].last_compile_start + data->time_to_burnout;
+		if (closest == -1 || dl < closest)
+			closest = dl;
+		i ++;
+	}
+	return (closest);
+}
+
 // """
 //
 // """
@@ -86,10 +104,7 @@ void	*supervisor_routine(void *arg)
 {
 	t_data			*data;
 	long long		now;
-	long long		closest;
-	long long		dl;
 	struct timespec	ts;
-	int				i;
 
 	data = (t_data *)arg;
 	pthread_mutex_lock(&data->time_mutex);
@@ -98,16 +113,7 @@ void	*supervisor_routine(void *arg)
 		now = get_time();
 		if (check_all_compiled(data) || check_if_anyone_died(data, now))
 			break ;
-		closest = -1;
-		i = 0;
-		while (i < data->num_coders)
-		{
-			dl = data->coders[i].last_compile_start + data->time_to_burnout;
-			if (closest == -1 || dl < closest)
-				closest = dl;
-			i ++;
-		}
-		set_timespec(&ts, closest);
+		set_timespec(&ts, get_closest_dl(data));
 		pthread_cond_timedwait(&data->sv_cond, &data->time_mutex, &ts);
 	}
 	pthread_mutex_unlock(&data->time_mutex);
