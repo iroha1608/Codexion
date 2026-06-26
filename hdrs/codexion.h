@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 03:35:30 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 03:56:57 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ struct s_coder
 	t_data		*data;
 
 	void		*(*run)(void *arg);
-	bool		(*request_dongles)(t_coder *self);
+	int			(*request_dongles)(t_coder *self);
 	void		(*release_dongles)(t_coder *self);
-	bool		(*print_status)(t_coder *self, const char *status);
+	int			(*print_status)(t_coder *self, const char *status);
 };
 
 // Heap (Queue)
@@ -154,7 +154,6 @@ bool		ft_atol(const char *str, long long *result);
 
 // ------------------------------ print.c ------------------------------
 int			print_error(const char *msg);
-bool		coder_print_status(t_coder *self, const char *status);
 
 // ============================== srcs/heap ==============================
 // ------------------------------ heap_pop.c ------------------------------
@@ -177,14 +176,15 @@ int			is_empty_heap(t_heap *heap);
 // ------------------------------ coder.c ------------------------------
 // Coder's Method
 void		*coder_routine(void *arg);
-bool 		check_running(t_data *data);
+bool		check_running(t_data *data);
 // static void	perform_compile(t_coder *self);
 // static void	perform_debug_and_refactor(t_coder *self);
 // static void	wait_for_start_signal(t_coder *self);
 //
-// ------------------------------ coder2.c ------------------------------
-bool		coder_request_dongles(t_coder *self);
+// ------------------------------ coder_method.c ------------------------------
+int			coder_request_dongles(t_coder *self);
 void		coder_release_dongles(t_coder *self);
+int		coder_print_status(t_coder *self, const char *status);
 // static void	wait_for_dongles(t_coder *self, long long cd_end);
 
 #endif

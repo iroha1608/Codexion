@@ -6,12 +6,12 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/25 16:54:22 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 17:00:07 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 03:51:43 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-///
+/// Coder's method
 /// """
 #include "../../hdrs/codexion.h"
 
@@ -36,7 +36,7 @@ static void	wait_for_dongles(t_coder *self, long long cd_end)
 /// """
 ///
 /// """
-bool	coder_request_dongles(t_coder *self)
+int	coder_request_dongles(t_coder *self)
 {
 	long long		cd_end;
 
@@ -80,4 +80,31 @@ void	coder_release_dongles(t_coder *self)
 		i++;
 	}
 	pthread_mutex_unlock(&self->data->scheduler_mutex);
+}
+
+/// """
+/// fprintf is failed, all coder destroy.
+/// """
+int	coder_print_status(t_coder *self, const char *status)
+{
+	long long	now_micro;
+	long long	now_milli;
+
+	pthread_mutex_lock(&self->data->time_mutex);
+	if (!self->data->is_simulation_running)
+	{
+		pthread_mutex_unlock(&self->data->time_mutex);
+		return (false);
+	}
+	pthread_mutex_lock(&self->data->print_mutex);
+	now_micro = get_time() - self->data->simulation_start_time;
+	now_milli = now_micro / 1000LL;
+	if (printf("%lld %d %s\n", now_milli, self->id, status) < 0)
+	{
+		self->data->is_simulation_running = false;
+		pthread_cond_broadcast(&self->data->exit_cond);
+	}
+	pthread_mutex_unlock(&self->data->print_mutex);
+	pthread_mutex_unlock(&self->data->time_mutex);
+	return (true);
 }
