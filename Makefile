@@ -15,13 +15,15 @@ INIT_DIR		=	init/
 CORE_DIR		=	core/
 UTILS_DIR		=	utils/
 CODER_DIR		=	coder/
+HEAP_DIR		=	heap/
 
 # ----- Source Files -----
 SRCS		=	$(SRCS_MAIN) \
 				$(SRCS_INIT) \
 				$(SRCS_CORE) \
 				$(SRCS_UTILS) \
-				$(SRCS_CODER)
+				$(SRCS_CODER) \
+				$(SRCS_HEAP)
 SRCS_MAIN	=	main.c \
 				simulation.c
 SRCS_INIT	=	init.c \
@@ -30,9 +32,12 @@ SRCS_INIT	=	init.c \
 SRCS_CORE	=	arbiter.c \
 				supervisor.c
 SRCS_UTILS	=	utils.c \
-				heap.c \
 				print.c
-SRCS_CODER	=	coder.c
+SRCS_CODER	=	coder.c \
+				coder2.c
+SRCS_HEAP	=	heap.c \
+				pop_heap.c \
+				push_heap.c
 
 # --- Object Files ---
 OBJS		=	$(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
@@ -47,6 +52,7 @@ vpath %.c	$(SRC_DIR) \
 			$(SRC_DIR)$(CORE_DIR) \
 			$(SRC_DIR)$(UTILS_DIR) \
 			$(SRC_DIR)$(CODER_DIR) \
+			$(SRC_DIR)$(HEAP_DIR) \
 
 # Mandatory Part
 all:	$(TARGET)

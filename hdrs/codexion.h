@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 15:14:56 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 02:36:24 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ bool		parse_arguments(int argc, char **argv, t_data *data);
 // ------------------------------ cleanup.c ------------------------------
 void		rollback_system_mutexes(t_data *data);
 void		rollback_conds(t_data *data, int count);
+void		free_arrays(t_data *data);
 void		cleanup_data(t_data *data);
 
 // ============================== srcs/core ==============================
@@ -150,25 +151,35 @@ void		set_timespec(struct timespec *ts, long long time);
 void		precise_sleep(long long sleep_time, t_data *data);
 bool		ft_atol(const char *str, long long *result);
 
-// ------------------------------ heap.c ------------------------------
-int			is_higher_priority(t_coder *a, t_coder *b, int scheduler_type);
-t_heap		*init_heap(int capacity, int scheduler_type);
-void		free_heap(t_heap *heap);
-void		push_heap(t_heap *heap, t_coder *coder);
-t_coder		*pop_heap(t_heap *heap);
-int			is_empty_heap(t_heap *heap);
-
 // ------------------------------ print.c ------------------------------
 int			print_error(const char *msg);
 bool		coder_print_status(t_coder *self, const char *status);
 
+// ============================== srcs/heap ==============================
+// ------------------------------ heap_pop.c ------------------------------
+t_coder		*pop_heap(t_heap *heap);
+
+// ------------------------------ heap_push.c ------------------------------
+void		push_heap(t_heap *heap, t_coder *coder);
+
+// ------------------------------ heap.c ------------------------------
+int			is_higher_priority(t_coder *a, t_coder *b, int scheduler_type);
+t_heap		*init_heap(int capacity, int scheduler_type);
+void		free_heap(t_heap *heap);
+int			is_empty_heap(t_heap *heap);
+
 // ============================== srcs/coder ==============================
 // ------------------------------ coder.c ------------------------------
 // Coder's Method
+void		*coder_routine(void *arg);
+bool 		check_running(t_data *data);
+// static void	perform_compile(t_coder *self)
+// static void	perform_debug_and_refactor(t_coder *self)
+// static void	wait_for_start_signal(t_coder *self)
+//
+// ------------------------------ coder2.c ------------------------------
 bool		coder_request_dongles(t_coder *self);
 void		coder_release_dongles(t_coder *self);
-void		*coder_routine(void *arg);
-// static	bool check_running(t_data *data)
-// static void	perform_compile(t_coder *self)
+// static void	wait_for_dongles(t_coder *self, long long cd_end)
 
 #endif
