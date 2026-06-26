@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 16:38:12 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 02:31:03 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,19 +66,6 @@ static bool	init_sys_mutex_2(t_data *data)
 		return (false);
 	}
 	return (true);
-}
-
-///
-/// Memory allocate sita hennsuu nomi free.
-///
-static void	free_arrays(t_data *data)
-{
-	if (data->coders)
-		free(data->coders);
-	if (data->dongles)
-		free(data->dongles);
-	if (data->dongle_conds)
-		free(data->dongle_conds);
 }
 
 // """
