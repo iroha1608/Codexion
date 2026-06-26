@@ -34,7 +34,7 @@ SRCS_CORE	=	arbiter.c \
 SRCS_UTILS	=	utils.c \
 				print.c
 SRCS_CODER	=	coder.c \
-				coder2.c
+				coder_method.c
 SRCS_HEAP	=	heap.c \
 				pop_heap.c \
 				push_heap.c

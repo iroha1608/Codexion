@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 02:31:03 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 03:50:07 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,10 @@ static bool	init_coders_and_conds(t_data *data)
 		data->coders[i].data = data;
 		data->coders[i].left_dongle_id = i;
 		data->coders[i].right_dongle_id = (i + 1) % data->num_coders;
-		data->coders[i].print_status = coder_print_status;
+		data->coders[i].run = coder_routine;
 		data->coders[i].request_dongles = coder_request_dongles;
 		data->coders[i].release_dongles = coder_release_dongles;
-		data->coders[i].run = coder_routine;
+		data->coders[i].print_status = coder_print_status;
 		i ++;
 	}
 	return (true);
