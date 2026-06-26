@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 02:36:24 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 03:35:30 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,9 @@ struct s_data
 // ------------------------------ main.c ------------------------------
 
 // ------------------------------ simulation.c ------------------------------
-void		wait_all_threads(t_data *data, int count);
 bool		start_simulation(t_data *data);
+void		run_supervisor_and_wait(t_data *data);
+void		wait_all_threads(t_data *data, int count);
 
 // ============================== srcs/init ==============================
 // ------------------------------ init.c ------------------------------
@@ -123,10 +124,10 @@ bool		parse_arguments(int argc, char **argv, t_data *data);
 // static bool assign_arguments(char **argv, t_data *data);
 
 // ------------------------------ cleanup.c ------------------------------
+void		cleanup_data(t_data *data);
+void		free_arrays(t_data *data);
 void		rollback_system_mutexes(t_data *data);
 void		rollback_conds(t_data *data, int count);
-void		free_arrays(t_data *data);
-void		cleanup_data(t_data *data);
 
 // ============================== srcs/core ==============================
 // ------------------------------ arbiter.c ------------------------------
@@ -158,9 +159,13 @@ bool		coder_print_status(t_coder *self, const char *status);
 // ============================== srcs/heap ==============================
 // ------------------------------ heap_pop.c ------------------------------
 t_coder		*pop_heap(t_heap *heap);
+// static void	heapify_down(t_heap *heap, int i);
+// static int	get_smallest_child(
+// 		t_heap *heap, int count, int left, int right);
 
 // ------------------------------ heap_push.c ------------------------------
 void		push_heap(t_heap *heap, t_coder *coder);
+// static void	heapify_up(t_heap *heap, int i);
 
 // ------------------------------ heap.c ------------------------------
 int			is_higher_priority(t_coder *a, t_coder *b, int scheduler_type);
@@ -173,13 +178,13 @@ int			is_empty_heap(t_heap *heap);
 // Coder's Method
 void		*coder_routine(void *arg);
 bool 		check_running(t_data *data);
-// static void	perform_compile(t_coder *self)
-// static void	perform_debug_and_refactor(t_coder *self)
-// static void	wait_for_start_signal(t_coder *self)
+// static void	perform_compile(t_coder *self);
+// static void	perform_debug_and_refactor(t_coder *self);
+// static void	wait_for_start_signal(t_coder *self);
 //
 // ------------------------------ coder2.c ------------------------------
 bool		coder_request_dongles(t_coder *self);
 void		coder_release_dongles(t_coder *self);
-// static void	wait_for_dongles(t_coder *self, long long cd_end)
+// static void	wait_for_dongles(t_coder *self, long long cd_end);
 
 #endif

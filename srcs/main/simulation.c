@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 17:51:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 15:34:55 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 03:31:58 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,25 @@ void	wait_all_threads(t_data *data, int count)
 		pthread_join(data->coders[i].thread_id, NULL);
 		i ++;
 	}
+}
+
+///
+///
+///
+void	run_supervisor_and_wait(t_data *data)
+{
+	pthread_t	sv_thread;
+
+	if (pthread_create(&sv_thread, NULL, supervisor_routine, data) != 0)
+	{
+		print_error("Failed to create supervisor thread.");
+		pthread_mutex_lock(&data->time_mutex);
+		data->is_simulation_running = false;
+		pthread_cond_broadcast(&data->exit_cond);
+		pthread_mutex_unlock(&data->time_mutex);
+	}
+	else
+		pthread_join(sv_thread, NULL);
 }
 
 static bool	handle_create_error(t_data *data, int count)
