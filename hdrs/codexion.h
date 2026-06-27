@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 18:13:16 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 19:58:10 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,11 @@ struct s_data
 	t_dongle		*dongles;
 	t_heap			*wait_queue; // Queue
 	pthread_mutex_t	scheduler_mutex;
-	pthread_cond_t	*dongle_conds;
 	pthread_mutex_t	time_mutex;
+	pthread_mutex_t	print_mutex;
+	pthread_cond_t	*dongle_conds;
 	pthread_cond_t	sv_cond;
 	pthread_cond_t	exit_cond;
-	pthread_mutex_t	print_mutex;
 };
 
 // ============================== srcs/main ==============================
@@ -117,15 +117,16 @@ void		wait_all_threads(t_data *data, int count);
 // ============================== srcs/init ==============================
 // =------------------------------ parse.c -------------------------------
 bool		parse_arguments(int argc, char **argv, t_data *data);
-// static bool parse_scheduler(char *arg, t_data *data);
-// static bool assign_arguments(char **argv, t_data *data);
+// static bool	parse_scheduler(char *arg, t_data *data);
+// static bool	assign_arguments(char **argv, t_data *data);
+// static bool	ft_atol(const char *str, long long *result);
 
 // ------------------------------- init.c -------------------------------
 int			init_data(t_data *data);
 // static bool	init_sys_mutex_1(t_data *data);
 // static bool	init_sys_mutex_2(t_data *data);
-// static bool allocate_arrays(t_data *data);
-// static bool init_coders_and_conds(t_data *data);
+// static bool	allocate_arrays(t_data *data);
+// static bool	init_coders_and_conds(t_data *data);
 //
 // ------------------------------ cleanup.c ------------------------------
 void		cleanup_data(t_data *data);
@@ -144,11 +145,11 @@ void		*supervisor_routine(void *arg);
 
 // ------------------------------ arbiter.c ------------------------------
 bool		attempt_to_grab_dongles(t_coder *self, long long *cd_end);
-// static void init_available_array(int *abail, t_data *data)
-// static void restore_heap(t_heap *heap, t_coder **tmp, int count)
-// static bool process_poped_coder(
+// static void	init_available_array(int *abail, t_data *data)
+// static void	restore_heap(t_heap *heap, t_coder **tmp, int count)
+// static bool	process_poped_coder(
 // 		t_coder *self, t_coder *c, int *avail, long long *cd_end)
-// static bool check_my_turn(
+// static bool	check_my_turn(
 // 		t_coder *self, t_coder *c, int *avail, long long *cd_end)
 
 
@@ -191,7 +192,6 @@ int			is_empty_heap(t_heap *heap);
 long long	get_time(void);
 void		set_timespec(struct timespec *ts, long long time);
 void		precise_sleep(long long sleep_time, t_data *data);
-bool		ft_atol(const char *str, long long *result);
 
 // ------------------------------- print.c -------------------------------
 int			print_error(const char *msg);
