@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 17:51:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 22:08:44 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 23:00:23 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	wait_all_threads(t_data *data, int create_count)
 	i = 0;
 	while (i < create_count)
 	{
-		pthread_join(data->coders[i].thread_id, NULL);
+		if (pthread_join(data->coders[i].thread_id, NULL) != 0)
+			print_error("Failed to join coder thread.");
 		i ++;
 	}
 }
@@ -53,7 +54,8 @@ void	run_supervisor_and_wait(t_data *data)
 		pthread_mutex_unlock(&data->time_mutex);
 	}
 	else
-		pthread_join(sv_thread, NULL);
+		if (pthread_join(sv_thread, NULL) != 0)
+			print_error("Failed to join coder thread.");
 }
 
 /// """
