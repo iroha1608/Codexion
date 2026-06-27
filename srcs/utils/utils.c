@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:34:51 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 19:13:04 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 22:59:59 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	set_timespec(struct timespec *ts, long long time)
 
 /// """
 /// No huristic. use exit_cond wait timeout.
+/// exit_condにシグナルが来たら即起床。
 /// """
 void	precise_sleep(long long sleep_time, t_data *data)
 {
