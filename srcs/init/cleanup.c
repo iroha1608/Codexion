@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 22:46:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 02:33:46 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 16:11:41 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	cleanup_data(t_data *data)
 {
 	if (data->wait_queue)
 		free_heap(data->wait_queue);
-	free_arrays(data);
 	rollback_conds(data, data->num_coders);
+	free_arrays(data);
 	rollback_system_mutexes(data);
 }
