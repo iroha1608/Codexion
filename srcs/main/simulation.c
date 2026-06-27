@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 17:51:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 23:00:23 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 23:07:13 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 /// A process that uses 'pthread_create' to create threads
 /// for multiple Coders and a Supervisor, and synchronizes them so that
 /// they all start at the same time.
+/// *** If 'pthread_join' fails, there's nothing you can do.***
 /// """
 #include "../../hdrs/codexion.h"
 
