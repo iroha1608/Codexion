@@ -6,17 +6,20 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:41:03 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 17:38:00 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 22:41:11 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-///
+/// This is main routine that loops indefinitely until the coder
+/// either 'dies' or 'everyone is finished.'
 /// """
 #include "../../hdrs/codexion.h"
 
 /// """
-///
+/// Wait until all Coders are present,
+/// and once they are, send signal to the Supervisor(sv_cond).
+/// Wait for the 'sync_and_start()' start signal at start_cond.
 /// """
 static void	wait_for_start_signal(t_coder *self)
 {
@@ -30,7 +33,7 @@ static void	wait_for_start_signal(t_coder *self)
 }
 
 /// """
-///
+/// Simulation is currently running / Check to see if anyone has died.
 /// """
 bool	check_running(t_data *data)
 {
@@ -43,7 +46,7 @@ bool	check_running(t_data *data)
 }
 
 /// """
-///
+/// Perform a 'Compile' after obtaining the Dongles.
 /// """
 static void	perform_compile(t_coder *self)
 {
@@ -59,7 +62,7 @@ static void	perform_compile(t_coder *self)
 }
 
 /// """
-///
+/// Perform 'Debugging' and 'Refactoring'.
 /// """
 static void	perform_debug_and_refactor(t_coder *self)
 {
@@ -70,9 +73,9 @@ static void	perform_debug_and_refactor(t_coder *self)
 }
 
 /// """
-/// Todo:
-/// - [x] Todo: debug, refactoringの時も短くても関数を切り分けたい
-/// coderが一人の時, 偶数の時,
+/// The main loop for each Coder thread.
+/// It repeats the cycle of
+/// Dongle request -> Compile -> Return -> Debug -> Refactor.
 /// """
 void	*coder_routine(void *arg)
 {

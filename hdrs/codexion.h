@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 22:10:56 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 22:59:49 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ struct s_data
 	t_coder			*coders;
 	t_dongle		*dongles;
 	t_heap			*wait_queue; // Queue
-	pthread_mutex_t	scheduler_mutex;
-	pthread_mutex_t	time_mutex;
-	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	scheduler_mutex; // Queue waiting
+	pthread_mutex_t	time_mutex; // Get time waiting
+	pthread_mutex_t	print_mutex; // Print waiting
 	pthread_cond_t	*dongle_conds;
 	pthread_cond_t	sv_cond;
 	pthread_cond_t	exit_cond;
@@ -142,13 +142,13 @@ void		*supervisor_routine(void *arg);
 // static long long	get_closest_dl(t_data *data);
 
 // ------------------------------ arbiter.c ------------------------------
-bool		attempt_to_grab_dongles(t_coder *self, long long *cd_end);
+bool		attempt_to_grab_dongles(t_coder *self, long long *cooldown_end);
 // static void	init_available_array(int *abail, t_data *data)
 // static void	restore_heap(t_heap *heap, t_coder **tmp, int count)
 // static bool	process_poped_coder(
-// 		t_coder *self, t_coder *c, int *avail, long long *cd_end)
+// 		t_coder *self, t_coder *c, int *avail, long long *cooldown_end)
 // static bool	check_my_turn(
-// 		t_coder *self, t_coder *c, int *avail, long long *cd_end)
+// 		t_coder *self, t_coder *c, int *avail, long long *cooldown_end)
 
 // ============================== srcs/coder ===============================
 // ------------------------------- coder.c --------------------------------

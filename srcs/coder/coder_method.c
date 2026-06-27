@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   coder2.c                                           :+:      :+:    :+:   */
+/*   coder_method.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/25 16:54:22 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 03:51:43 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 22:59:43 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
 /// Coder's method
+/// That called in 'coder_routine'.
 /// """
 #include "../../hdrs/codexion.h"
 
 /// """
-///
+/// While waiting for its turn, the process enters a 'sleep' state
+/// using a Condition variable.
+/// If a cooldown end time (cooldown_end) is specified,
+/// the process enters sleep mode with a timer.
 /// """
-static void	wait_for_dongles(t_coder *self, long long cd_end)
+static void	wait_for_dongles(t_coder *self, long long cooldown_end)
 {
 	struct timespec	ts;
 
-	if (cd_end > 0)
+	if (cooldown_end > 0)
 	{
-		set_timespec(&ts, cd_end);
+		set_timespec(&ts, cooldown_end);
 		pthread_cond_timedwait(&self->data->dongle_conds[self->id - 1],
 			&self->data->scheduler_mutex, &ts);
 	}
@@ -34,11 +38,13 @@ static void	wait_for_dongles(t_coder *self, long long cd_end)
 }
 
 /// """
-///
+/// Request a Dongle and wait until it is granted.
+/// Enroll in the Arbiter's waiting list (push_heap)
+/// and wait until permission is granted.
 /// """
 int	coder_request_dongles(t_coder *self)
 {
-	long long		cd_end;
+	long long		cooldown_end;
 
 	pthread_mutex_lock(&self->data->scheduler_mutex);
 	self->request_time = get_time();
@@ -49,16 +55,17 @@ int	coder_request_dongles(t_coder *self)
 	push_heap(self->data->wait_queue, self);
 	while (check_running(self->data))
 	{
-		if (attempt_to_grab_dongles(self, &cd_end))
+		if (attempt_to_grab_dongles(self, &cooldown_end))
 			break ;
-		wait_for_dongles(self, cd_end);
+		wait_for_dongles(self, cooldown_end);
 	}
 	pthread_mutex_unlock(&self->data->scheduler_mutex);
 	return (check_running(self->data));
 }
 
 /// """
-///
+/// Updates the last time the dongle was used (available_time),
+/// return the dongle, and send a signal to all waiting Coders.
 /// """
 void	coder_release_dongles(t_coder *self)
 {
@@ -83,7 +90,8 @@ void	coder_release_dongles(t_coder *self)
 }
 
 /// """
-/// fprintf is failed, all coder destroy.
+/// Format and output the Coder's current stateus.
+/// If the 'printf' call failsm, immediately force the simulation to teminate.
 /// """
 int	coder_print_status(t_coder *self, const char *status)
 {
