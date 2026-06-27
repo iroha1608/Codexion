@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 22:46:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 17:35:50 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 19:58:03 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 #include "../../hdrs/codexion.h"
 
 /// """
-/// Initialize success system's Mutex/Cond is destroy.
+/// Destroy the mutex and condition variables
+/// that were successfully initialized.
 /// """
 void	rollback_system_mutexes(t_data *data)
 {
@@ -29,7 +30,8 @@ void	rollback_system_mutexes(t_data *data)
 }
 
 /// """
-///
+/// Destroy the specified number of standby condition variables
+/// created for each coder.
 /// """
 void	rollback_conds(t_data *data, int count)
 {
@@ -44,7 +46,8 @@ void	rollback_conds(t_data *data, int count)
 }
 
 /// """
-/// Memory allocate sita hennsuu nomi free.
+/// Free the memory allocated for the array containing
+/// the Coders, Dongles, and dongle stanby condition variables.
 /// """
 void	free_arrays(t_data *data)
 {
@@ -57,7 +60,8 @@ void	free_arrays(t_data *data)
 }
 
 /// """
-/// cleanup queue
+/// Release all memory, mutexes, and condition variables
+/// when the simulation ends or an error occurs.
 /// """
 void	cleanup_data(t_data *data)
 {

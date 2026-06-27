@@ -6,17 +6,17 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:54:45 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 17:33:42 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 19:22:02 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-///
+/// Parsing arguments.
 /// """
 #include "../../hdrs/codexion.h"
 
 /// """
-/// Scheduler argument character check "fifo" or "edf".
+/// Scheduler argument character check, "fifo" = 0, "edf" = 1.
 /// """
 static bool	parse_scheduler(char *arg, t_data *data)
 {
@@ -30,7 +30,34 @@ static bool	parse_scheduler(char *arg, t_data *data)
 }
 
 /// """
-// all arguments
+/// Receive a string, check for integer overflow,
+/// and store it as a 'long long'.
+/// """
+static bool	ft_atol(const char *str, long long *result)
+{
+	int			i;
+	long long	ret;
+
+	i = 0;
+	ret = 0;
+	if (str[i] == '\0')
+		return (false);
+	while (str[i])
+	{
+		if (str[i] < '0' || '9' < str[i])
+			return (false);
+		if (ret > (LLONG_MAX - (str[i] - '0')) / 10)
+			return (false);
+		ret = ret * 10 + (str[i] - '0');
+		i ++;
+	}
+	*result = ret;
+	return (true);
+}
+
+/// """
+/// Number arguments parsing.
+/// burnout, compile, debug, refactor, coooldown save in microseconds.
 /// """
 static bool	assign_arguments(char **argv, t_data *data)
 {
@@ -55,15 +82,15 @@ static bool	assign_arguments(char **argv, t_data *data)
 }
 
 /// """
-/// Arguments parsing.
+/// Check the number of arguments is correct, then call parding function.
 /// """
 bool	parse_arguments(int argc, char **argv, t_data *data)
 {
 	if (argc != 9)
 		return (print_error("Invalid number of arguments.") == 0);
-	if (!assign_arguments(argv, data))
+	if (assign_arguments(argv, data) == false)
 		return (print_error("Args must be non-negative integers.") == 0);
-	if (!parse_scheduler(argv[8], data))
+	if (parse_scheduler(argv[8], data) == false)
 		return (print_error("Scheduler must be 'fifo' or 'edf'.") == 0);
 	if (data->num_coders <= 0 || data->num_compiles_required == 0)
 		return (print_error("Invalid coder count or 0 compiles.") == 0);

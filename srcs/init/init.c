@@ -6,17 +6,18 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 17:34:57 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 19:58:13 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-///
+/// Allocate memory and set the initial state of mutex used by the entire
+/// system and each coder.
 /// """
 #include "../../hdrs/codexion.h"
 
 /// """
-///
+/// Initialize mutex and condition variables.
 /// """
 static bool	init_sys_mutex_1(t_data *data)
 {
@@ -37,7 +38,7 @@ static bool	init_sys_mutex_1(t_data *data)
 }
 
 /// """
-///
+/// Initialize mutex and condition variables 2.
 /// """
 static bool	init_sys_mutex_2(t_data *data)
 {
@@ -69,7 +70,8 @@ static bool	init_sys_mutex_2(t_data *data)
 }
 
 /// """
-/// Coder no kazu bun coder, dongle, dongle_cond no memory allocate.
+/// Allocate memory for the Coder, Dongle, Dongle_cond arrays
+/// based on the number of coders.
 /// """
 static bool	allocate_arrays(t_data *data)
 {
@@ -85,7 +87,9 @@ static bool	allocate_arrays(t_data *data)
 }
 
 /// """
-/// print_status, request_dongles, release_dongles, run is Actor method.
+/// Initialize each coder and dongle.
+/// 'run', 'request_dongles', 'release_dongles', 'print_status',
+/// are methods of the Coder.
 /// """
 static bool	init_coders_and_conds(t_data *data)
 {
@@ -117,9 +121,12 @@ static bool	init_coders_and_conds(t_data *data)
 }
 
 /// """
-/// Initialize queue.
+/// Initialize function called when the program starts.
+/// If it fails, it rolls back all memory, mutexes, and condition variables
+/// allocated so far.
 /// Todo:
 /// - [x] data->coders/dongles/dongle_conds のfreeは1関数にまとめて呼び出す。
+/// - [ ] rollback_system_mutexes内で条件チェックし、初期化関数を簡略化する。
 /// """
 int	init_data(t_data *data)
 {
@@ -139,8 +146,8 @@ int	init_data(t_data *data)
 	data->wait_queue = init_heap(data->num_coders, data->scheduler_type);
 	if (!data->wait_queue)
 	{
-		free_arrays(data);
 		rollback_conds(data, data->num_coders);
+		free_arrays(data);
 		rollback_system_mutexes(data);
 		return (false);
 	}

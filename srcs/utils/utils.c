@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:34:51 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 17:41:32 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 19:13:04 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,29 +49,4 @@ void	precise_sleep(long long sleep_time, t_data *data)
 	pthread_mutex_lock(&data->time_mutex);
 	pthread_cond_timedwait(&data->exit_cond, &data->time_mutex, &ts);
 	pthread_mutex_unlock(&data->time_mutex);
-}
-
-/// """
-/// validate overflow suuti hennkann.
-/// """
-bool	ft_atol(const char *str, long long *result)
-{
-	int			i;
-	long long	ret;
-
-	i = 0;
-	ret = 0;
-	if (str[i] == '\0')
-		return (false);
-	while (str[i])
-	{
-		if (str[i] < '0' || '9' < str[i])
-			return (false);
-		if (ret > (LLONG_MAX - (str[i] - '0')) / 10)
-			return (false);
-		ret = ret * 10 + (str[i] - '0');
-		i ++;
-	}
-	*result = ret;
-	return (true);
 }
