@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 19:58:10 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 22:10:56 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,9 @@ struct s_data
 // ---------------------------- simulation.c ----------------------------
 bool		start_simulation(t_data *data);
 void		run_supervisor_and_wait(t_data *data);
-void		wait_all_threads(t_data *data, int count);
-// static bool	handle_create_error(t_data *data, int count);
+void		wait_all_threads(t_data *data, int create_count);
+// static bool	handle_create_error(t_data *data, int create_count);
 // static void	sync_and_start(t_data *data);
-
 
 // ============================== srcs/init ==============================
 // =------------------------------ parse.c -------------------------------
@@ -134,7 +133,6 @@ void		free_arrays(t_data *data);
 void		rollback_system_mutexes(t_data *data);
 void		rollback_conds(t_data *data, int count);
 
-
 // ============================== srcs/core ===============================
 // ----------------------------- supervisor.c -----------------------------
 void		*supervisor_routine(void *arg);
@@ -152,7 +150,6 @@ bool		attempt_to_grab_dongles(t_coder *self, long long *cd_end);
 // static bool	check_my_turn(
 // 		t_coder *self, t_coder *c, int *avail, long long *cd_end)
 
-
 // ============================== srcs/coder ===============================
 // ------------------------------- coder.c --------------------------------
 // Coder's Method
@@ -167,7 +164,6 @@ int			coder_request_dongles(t_coder *self);
 void		coder_release_dongles(t_coder *self);
 int			coder_print_status(t_coder *self, const char *status);
 // static void	wait_for_dongles(t_coder *self, long long cd_end);
-
 
 // =============================== srcs/heap ===============================
 // ------------------------------ heap_pop.c ------------------------------
@@ -185,7 +181,6 @@ int			is_higher_priority(t_coder *a, t_coder *b, int scheduler_type);
 t_heap		*init_heap(int capacity, int scheduler_type);
 void		free_heap(t_heap *heap);
 int			is_empty_heap(t_heap *heap);
-
 
 // ============================== srcs/utils ==============================
 // ------------------------------- utils.c -------------------------------

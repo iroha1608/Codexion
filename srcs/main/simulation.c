@@ -6,24 +6,28 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 17:51:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 17:32:50 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 22:08:44 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-/// 
+/// A process that uses 'pthread_create' to create threads
+/// for multiple Coders and a Supervisor, and synchronizes them so that
+/// they all start at the same time.
 /// """
 #include "../../hdrs/codexion.h"
 
 /// """
-/// threadの回収。作れた分だけjoinする
+/// Wait for successfully created Coder threads to converge.
+/// By having the main thread wait here,
+/// we prevent the program from terminating unexpectedly.
 /// """
-void	wait_all_threads(t_data *data, int count)
+void	wait_all_threads(t_data *data, int create_count)
 {
 	int	i;
 
 	i = 0;
-	while (i < count)
+	while (i < create_count)
 	{
 		pthread_join(data->coders[i].thread_id, NULL);
 		i ++;
@@ -31,7 +35,10 @@ void	wait_all_threads(t_data *data, int count)
 }
 
 /// """
-///
+/// Create the Supervisor and wait for it to exit.
+/// This function called affter all coders habe gathered and started.
+/// When the Supervisor finishes,
+/// it means either someone has died or everyone has finished compiling.
 /// """
 void	run_supervisor_and_wait(t_data *data)
 {
@@ -50,9 +57,12 @@ void	run_supervisor_and_wait(t_data *data)
 }
 
 /// """
-///
+/// Handling for when an error occurs while creating a thread.
+/// Send a termination on start signal to any threads
+/// that have already been created and are waiting,
+/// then terminate after safely merging them.
 /// """
-static bool	handle_create_error(t_data *data, int count)
+static bool	handle_create_error(t_data *data, int create_count)
 {
 	print_error("Failed to create thread.");
 	pthread_mutex_lock(&data->time_mutex);
@@ -60,12 +70,14 @@ static bool	handle_create_error(t_data *data, int count)
 	pthread_cond_broadcast(&data->start_cond);
 	pthread_cond_broadcast(&data->exit_cond);
 	pthread_mutex_unlock(&data->time_mutex);
-	wait_all_threads(data, count);
+	wait_all_threads(data, create_count);
 	return (false);
 }
 
 /// """
-///
+/// Wait until all Coders are ready, then start them all at once.
+/// Save the simulation start time (0ms)
+/// and synchronize the start times of the first compilation for all Coders.
 /// """
 static void	sync_and_start(t_data *data)
 {
@@ -87,8 +99,9 @@ static void	sync_and_start(t_data *data)
 }
 
 /// """
-/// 作成済みthreadの回収
-/// Todo: createのエラーハンドリングも別関数に分ける。
+/// Create a thread for each Coder.
+/// The created Coders each enter a state
+/// where they wait for a signal from 'sync_and_start'.
 /// """
 bool	start_simulation(t_data *data)
 {

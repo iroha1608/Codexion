@@ -6,24 +6,25 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:06:39 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 17:32:32 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 22:07:01 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-///
+/// The program's entry point.
 /// """
 #include "../../hdrs/codexion.h"
 
 /// """
-/// 全コーダーをjoinして終了を待つ。
-/// Todo: - [x] スーパーバイザー立ち上げの実装。
+/// It performs initialization, thread startup, wait for termination,
+/// and cleanup in that order.
 /// """
 int	main(int argc, char **argv)
 {
 	t_data		data;
 
-	memset(&data, 0, sizeof(t_data));
+	if (memset(&data, 0, sizeof(t_data)) == NULL)
+		return (1);
 	if (parse_arguments(argc, argv, &data) == false)
 		return (1);
 	if (init_data(&data) == false)
