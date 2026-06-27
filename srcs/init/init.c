@@ -6,18 +6,18 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 03:50:07 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 17:34:57 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// """
-//
-// """
+/// """
+///
+/// """
 #include "../../hdrs/codexion.h"
 
-// """
-//
-// """
+/// """
+///
+/// """
 static bool	init_sys_mutex_1(t_data *data)
 {
 	if (pthread_mutex_init(&data->scheduler_mutex, NULL) != 0)
@@ -36,9 +36,9 @@ static bool	init_sys_mutex_1(t_data *data)
 	return (true);
 }
 
-// """
-//
-// """
+/// """
+///
+/// """
 static bool	init_sys_mutex_2(t_data *data)
 {
 	if (pthread_cond_init(&data->sv_cond, NULL) != 0)
@@ -68,9 +68,9 @@ static bool	init_sys_mutex_2(t_data *data)
 	return (true);
 }
 
-// """
-// Coder no kazu bun coder, dongle, dongle_cond no memory allocate.
-// """
+/// """
+/// Coder no kazu bun coder, dongle, dongle_cond no memory allocate.
+/// """
 static bool	allocate_arrays(t_data *data)
 {
 	data->coders = malloc(data->num_coders * sizeof(t_coder));
@@ -84,9 +84,9 @@ static bool	allocate_arrays(t_data *data)
 	return (true);
 }
 
-// ""
-// print_status, request_dongles, release_dongles, run is Actor method.
-// ""
+/// """
+/// print_status, request_dongles, release_dongles, run is Actor method.
+/// """
 static bool	init_coders_and_conds(t_data *data)
 {
 	int	i;
@@ -116,10 +116,11 @@ static bool	init_coders_and_conds(t_data *data)
 	return (true);
 }
 
-// """
-	// Initialize queue
-// Todo: data->coders/dongles/dongle_conds のfreeは1関数にまとめて呼び出す。
-// """
+/// """
+/// Initialize queue.
+/// Todo:
+/// - [x] data->coders/dongles/dongle_conds のfreeは1関数にまとめて呼び出す。
+/// """
 int	init_data(t_data *data)
 {
 	if (init_sys_mutex_1(data) == false || init_sys_mutex_2(data) == false)

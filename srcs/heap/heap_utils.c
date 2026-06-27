@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heap2.c                                            :+:      :+:    :+:   */
+/*   heap.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 01:36:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 02:04:03 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 17:38:38 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 /// """
 #include "../../hdrs/codexion.h"
 
-// """
-// FIFO, EDF
-// """
+/// """
+/// FIFO, EDF
+/// """
 int	is_higher_priority(t_coder *a, t_coder *b, int scheduler_type)
 {
 	if (scheduler_type == 0)
@@ -36,6 +36,9 @@ int	is_higher_priority(t_coder *a, t_coder *b, int scheduler_type)
 	}
 }
 
+/// """
+///
+/// """
 t_heap	*init_heap(int capacity, int scheduler_type)
 {
 	t_heap	*heap;
@@ -55,6 +58,9 @@ t_heap	*init_heap(int capacity, int scheduler_type)
 	return (heap);
 }
 
+/// """
+///
+/// """
 void	free_heap(t_heap *heap)
 {
 	if (heap)

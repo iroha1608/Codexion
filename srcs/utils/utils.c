@@ -6,18 +6,19 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:34:51 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 14:50:44 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 17:41:32 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// """
-//
-// """
+/// """
+/// Todo:
+/// - [ ] gettimeofday()のエラーハンドリング
+/// """
 #include "../../hdrs/codexion.h"
 
-// """
-// inside time get micro second.
-// """
+/// """
+/// inside time get micro second.
+/// """
 long long	get_time(void)
 {
 	struct timeval	tv;
@@ -26,18 +27,18 @@ long long	get_time(void)
 	return ((long long)tv.tv_sec * 1000000LL + (long long)tv.tv_usec);
 }
 
-// """
-// micro second -> timespec
-// """
+/// """
+/// micro second -> timespec
+/// """
 void	set_timespec(struct timespec *ts, long long time)
 {
 	ts->tv_sec = time / 1000000LL;
 	ts->tv_nsec = (time % 1000000LL) * 1000LL;
 }
 
-// """
-// No huristic. use exit_cond wait timeout.
-// """
+/// """
+/// No huristic. use exit_cond wait timeout.
+/// """
 void	precise_sleep(long long sleep_time, t_data *data)
 {
 	struct timespec	ts;
@@ -50,9 +51,9 @@ void	precise_sleep(long long sleep_time, t_data *data)
 	pthread_mutex_unlock(&data->time_mutex);
 }
 
-// """
-// validate overflow suuti hennkann
-// """
+/// """
+/// validate overflow suuti hennkann.
+/// """
 bool	ft_atol(const char *str, long long *result)
 {
 	int			i;

@@ -6,13 +6,14 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 18:43:07 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 02:10:54 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 17:40:08 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-/// Todo:	関数の切り分け
-/// 		行数制限の回避
+/// Todo:
+/// - [x] 関数の切り分け
+/// - [ ] 行数制限の回避
 /// """
 #include "../../hdrs/codexion.h"
 
@@ -33,6 +34,9 @@ static int	get_smallest_child(t_heap *heap, int count, int left, int right)
 	return (smallest);
 }
 
+/// """
+///
+/// """
 static void	heapify_down(t_heap *heap, int i)
 {
 	int		left;
@@ -57,9 +61,9 @@ static void	heapify_down(t_heap *heap, int i)
 	}
 }
 
-///
-/// senntou toridashi saikoutiku
-///
+/// """
+/// senntou toridashi saikoutiku.
+/// """
 t_coder	*pop_heap(t_heap *heap)
 {
 	t_coder	*root;

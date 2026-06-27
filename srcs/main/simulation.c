@@ -6,18 +6,18 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 17:51:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 03:31:58 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 17:32:50 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// """
-//
-// """
+/// """
+/// 
+/// """
 #include "../../hdrs/codexion.h"
 
-// """
-// threadの回収。作れた分だけjoinする
-// """
+/// """
+/// threadの回収。作れた分だけjoinする
+/// """
 void	wait_all_threads(t_data *data, int count)
 {
 	int	i;
@@ -30,9 +30,9 @@ void	wait_all_threads(t_data *data, int count)
 	}
 }
 
+/// """
 ///
-///
-///
+/// """
 void	run_supervisor_and_wait(t_data *data)
 {
 	pthread_t	sv_thread;
@@ -49,6 +49,9 @@ void	run_supervisor_and_wait(t_data *data)
 		pthread_join(sv_thread, NULL);
 }
 
+/// """
+///
+/// """
 static bool	handle_create_error(t_data *data, int count)
 {
 	print_error("Failed to create thread.");
@@ -61,6 +64,9 @@ static bool	handle_create_error(t_data *data, int count)
 	return (false);
 }
 
+/// """
+///
+/// """
 static void	sync_and_start(t_data *data)
 {
 	int	i;
@@ -81,8 +87,8 @@ static void	sync_and_start(t_data *data)
 }
 
 /// """
-// 作成済みthreadの回収
-// Todo: createのエラーハンドリングも別関数に分ける。
+/// 作成済みthreadの回収
+/// Todo: createのエラーハンドリングも別関数に分ける。
 /// """
 bool	start_simulation(t_data *data)
 {

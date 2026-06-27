@@ -6,18 +6,18 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 19:12:57 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 16:37:24 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 17:36:56 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// """
-//
-// """
+/// """
+///
+/// """
 #include "../../hdrs/codexion.h"
 
-// """
-//
-// """
+/// """
+///
+/// """
 static void	wake_up_all_coders(t_data *data)
 {
 	int	j;
@@ -32,9 +32,9 @@ static void	wake_up_all_coders(t_data *data)
 	}
 }
 
-// """
-//
-// """
+/// """
+///
+/// """
 static bool	check_if_anyone_died(t_data *data, long long now)
 {
 	int			i;
@@ -59,9 +59,9 @@ static bool	check_if_anyone_died(t_data *data, long long now)
 	return (false);
 }
 
-// """
-//
-// """
+/// """
+///
+/// """
 static bool	check_all_compiled(t_data *data)
 {
 	int	i;
@@ -79,6 +79,9 @@ static bool	check_all_compiled(t_data *data)
 	return (true);
 }
 
+/// """
+///
+/// """
 static long long	get_closest_dl(t_data *data)
 {
 	long long		closest;
@@ -97,9 +100,9 @@ static long long	get_closest_dl(t_data *data)
 	return (closest);
 }
 
-// """
-//
-// """
+/// """
+///
+/// """
 void	*supervisor_routine(void *arg)
 {
 	t_data			*data;

@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:41:03 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 16:59:09 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 17:38:00 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static void	perform_debug_and_refactor(t_coder *self)
 }
 
 /// """
+/// Todo:
 /// - [x] Todo: debug, refactoringの時も短くても関数を切り分けたい
 /// coderが一人の時, 偶数の時,
 /// """

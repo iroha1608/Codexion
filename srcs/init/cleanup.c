@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 22:46:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 16:11:41 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 17:35:50 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ void	rollback_conds(t_data *data, int count)
 	}
 }
 
-///
+/// """
 /// Memory allocate sita hennsuu nomi free.
-///
+/// """
 void	free_arrays(t_data *data)
 {
 	if (data->coders)

@@ -35,9 +35,9 @@ SRCS_UTILS	=	utils.c \
 				print.c
 SRCS_CODER	=	coder.c \
 				coder_method.c
-SRCS_HEAP	=	heap.c \
-				pop_heap.c \
-				push_heap.c
+SRCS_HEAP	=	pop_heap.c \
+				push_heap.c \
+				heap_utils.c
 
 # --- Object Files ---
 OBJS		=	$(addprefix $(OBJ_DIR), $(SRCS:.c=.o))

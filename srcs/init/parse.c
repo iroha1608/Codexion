@@ -6,18 +6,18 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:54:45 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 14:44:43 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 17:33:42 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// """
-//
-// """
+/// """
+///
+/// """
 #include "../../hdrs/codexion.h"
 
-// """
-// Scheduler argument character check "fifo" or "edf".
-// """
+/// """
+/// Scheduler argument character check "fifo" or "edf".
+/// """
 static bool	parse_scheduler(char *arg, t_data *data)
 {
 	if (strcmp(arg, "fifo") == 0)
@@ -29,9 +29,9 @@ static bool	parse_scheduler(char *arg, t_data *data)
 	return (true);
 }
 
-// """
+/// """
 // all arguments
-// """
+/// """
 static bool	assign_arguments(char **argv, t_data *data)
 {
 	int			i;
@@ -54,9 +54,9 @@ static bool	assign_arguments(char **argv, t_data *data)
 	return (true);
 }
 
-// """S
-// Arguments parsing.
-// """
+/// """
+/// Arguments parsing.
+/// """
 bool	parse_arguments(int argc, char **argv, t_data *data)
 {
 	if (argc != 9)

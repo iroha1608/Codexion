@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 03:56:57 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 18:13:16 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,59 +103,72 @@ struct s_data
 };
 
 // ============================== srcs/main ==============================
-// ------------------------------ main.c ------------------------------
+// ------------------------------- main.c -------------------------------
+// int	main(int argc, char **argv);
 
-// ------------------------------ simulation.c ------------------------------
+// ---------------------------- simulation.c ----------------------------
 bool		start_simulation(t_data *data);
 void		run_supervisor_and_wait(t_data *data);
 void		wait_all_threads(t_data *data, int count);
+// static bool	handle_create_error(t_data *data, int count);
+// static void	sync_and_start(t_data *data);
+
 
 // ============================== srcs/init ==============================
-// ------------------------------ init.c ------------------------------
+// =------------------------------ parse.c -------------------------------
+bool		parse_arguments(int argc, char **argv, t_data *data);
+// static bool parse_scheduler(char *arg, t_data *data);
+// static bool assign_arguments(char **argv, t_data *data);
+
+// ------------------------------- init.c -------------------------------
 int			init_data(t_data *data);
 // static bool	init_sys_mutex_1(t_data *data);
 // static bool	init_sys_mutex_2(t_data *data);
 // static bool allocate_arrays(t_data *data);
 // static bool init_coders_and_conds(t_data *data);
 //
-// ------------------------------ parse.c ------------------------------
-bool		parse_arguments(int argc, char **argv, t_data *data);
-// static bool parse_scheduler(char *arg, t_data *data);
-// static bool assign_arguments(char **argv, t_data *data);
-
 // ------------------------------ cleanup.c ------------------------------
 void		cleanup_data(t_data *data);
 void		free_arrays(t_data *data);
 void		rollback_system_mutexes(t_data *data);
 void		rollback_conds(t_data *data, int count);
 
-// ============================== srcs/core ==============================
+
+// ============================== srcs/core ===============================
+// ----------------------------- supervisor.c -----------------------------
+void		*supervisor_routine(void *arg);
+// static bool	check_all_compiled(t_data *data);
+// static bool	check_if_anyone_died(t_data *data, long long now);
+// static void	wake_up_all_coders(t_data *data);
+// static long long	get_closest_dl(t_data *data);
+
 // ------------------------------ arbiter.c ------------------------------
 bool		attempt_to_grab_dongles(t_coder *self, long long *cd_end);
-// static void init_avail_array(int *abail, t_data *data)
+// static void init_available_array(int *abail, t_data *data)
 // static void restore_heap(t_heap *heap, t_coder **tmp, int count)
-// static bool check_my_turn(
-// 		t_coder *self, t_coder *c, int *avail, long long *cd_end)
 // static bool process_poped_coder(
 // 		t_coder *self, t_coder *c, int *avail, long long *cd_end)
+// static bool check_my_turn(
+// 		t_coder *self, t_coder *c, int *avail, long long *cd_end)
 
-// ------------------------------ supervisor.c ------------------------------
-void		*supervisor_routine(void *arg);
-// static void	wake_up_all_coders(t_data *data)
-// static bool	check_if_anyone_died(t_data *data, long long now)
-// static bool	check_all_compiled(t_data *data)
 
-// ============================== srcs/utils ==============================
-// ------------------------------ utils.c ------------------------------
-long long	get_time(void);
-void		set_timespec(struct timespec *ts, long long time);
-void		precise_sleep(long long sleep_time, t_data *data);
-bool		ft_atol(const char *str, long long *result);
+// ============================== srcs/coder ===============================
+// ------------------------------- coder.c --------------------------------
+// Coder's Method
+void		*coder_routine(void *arg);
+bool		check_running(t_data *data);
+// static void	perform_compile(t_coder *self);
+// static void	perform_debug_and_refactor(t_coder *self);
+// static void	wait_for_start_signal(t_coder *self);
+//
+// ---------------------------- coder_method.c -----------------------------
+int			coder_request_dongles(t_coder *self);
+void		coder_release_dongles(t_coder *self);
+int			coder_print_status(t_coder *self, const char *status);
+// static void	wait_for_dongles(t_coder *self, long long cd_end);
 
-// ------------------------------ print.c ------------------------------
-int			print_error(const char *msg);
 
-// ============================== srcs/heap ==============================
+// =============================== srcs/heap ===============================
 // ------------------------------ heap_pop.c ------------------------------
 t_coder		*pop_heap(t_heap *heap);
 // static void	heapify_down(t_heap *heap, int i);
@@ -166,25 +179,21 @@ t_coder		*pop_heap(t_heap *heap);
 void		push_heap(t_heap *heap, t_coder *coder);
 // static void	heapify_up(t_heap *heap, int i);
 
-// ------------------------------ heap.c ------------------------------
+// ------------------------------ heap_utils.c -----------------------------
 int			is_higher_priority(t_coder *a, t_coder *b, int scheduler_type);
 t_heap		*init_heap(int capacity, int scheduler_type);
 void		free_heap(t_heap *heap);
 int			is_empty_heap(t_heap *heap);
 
-// ============================== srcs/coder ==============================
-// ------------------------------ coder.c ------------------------------
-// Coder's Method
-void		*coder_routine(void *arg);
-bool		check_running(t_data *data);
-// static void	perform_compile(t_coder *self);
-// static void	perform_debug_and_refactor(t_coder *self);
-// static void	wait_for_start_signal(t_coder *self);
-//
-// ------------------------------ coder_method.c ------------------------------
-int			coder_request_dongles(t_coder *self);
-void		coder_release_dongles(t_coder *self);
-int		coder_print_status(t_coder *self, const char *status);
-// static void	wait_for_dongles(t_coder *self, long long cd_end);
+
+// ============================== srcs/utils ==============================
+// ------------------------------- utils.c -------------------------------
+long long	get_time(void);
+void		set_timespec(struct timespec *ts, long long time);
+void		precise_sleep(long long sleep_time, t_data *data);
+bool		ft_atol(const char *str, long long *result);
+
+// ------------------------------- print.c -------------------------------
+int			print_error(const char *msg);
 
 #endif

@@ -6,18 +6,18 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:40:55 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/25 14:41:33 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 17:37:36 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// """
-//
-// """
+/// """
+///
+/// """
 #include "../../hdrs/codexion.h"
 
-// """
-//
-// """
+/// """
+///
+/// """
 static void	init_available_array(int *avail, t_data *data)
 {
 	int	i;
@@ -30,9 +30,9 @@ static void	init_available_array(int *avail, t_data *data)
 	}
 }
 
-// """
-//
-// """
+/// """
+///
+/// """
 static void	restore_heap(t_heap *heap, t_coder **tmp, int count)
 {
 	int	i;
@@ -45,9 +45,9 @@ static void	restore_heap(t_heap *heap, t_coder **tmp, int count)
 	}
 }
 
-// """
-//
-// """
+/// """
+///
+/// """
 static bool	check_my_turn(
 		t_coder *self, t_coder *c, int *avail, long long *cd_end)
 {
@@ -73,9 +73,9 @@ static bool	check_my_turn(
 	return (false);
 }
 
-// """
-//
-// """
+/// """
+///
+/// """
 static bool	process_poped_coder(
 		t_coder *self, t_coder *c, int *avail, long long *cd_end)
 {
@@ -97,9 +97,9 @@ static bool	process_poped_coder(
 	return (false);
 }
 
-// """
-//
-// """
+/// """
+///
+/// """
 bool	attempt_to_grab_dongles(t_coder *self, long long *cd_end)
 {
 	int		count;

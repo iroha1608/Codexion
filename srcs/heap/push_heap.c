@@ -6,13 +6,14 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 02:04:47 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 02:28:02 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/27 17:40:02 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-/// Todo:	関数の切り分け
-/// 			行数制限の回避
+/// Todo:
+/// - [x] 関数の切り分け
+/// - [x] 行数制限の回避
 /// """
 #include "../../hdrs/codexion.h"
 
@@ -40,6 +41,9 @@ static void	heapify_up(t_heap *heap, int i)
 	}
 }
 
+/// """
+///
+/// """
 void	push_heap(t_heap *heap, t_coder *coder)
 {
 	int		i;
