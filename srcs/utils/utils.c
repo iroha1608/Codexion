@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:34:51 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 22:59:59 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 02:14:08 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,11 @@ long long	get_time(void)
 {
 	struct timeval	tv;
 
-	gettimeofday(&tv, NULL);
+	if (gettimeofday(&tv, NULL) != 0)
+	{
+		print_error("gettimeofday failed.");
+		return (-1);
+	}
 	return ((long long)tv.tv_sec * 1000000LL + (long long)tv.tv_usec);
 }
 
