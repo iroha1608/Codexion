@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:40:55 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 02:58:46 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 03:13:55 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 /// Copy the current availabillity of the dongle into an array.
 /// (e.g., AVAILABLE: true, IN_USE/COOLDOWN: false)
 /// """
-static void	init_available_array(int *avail, t_data *data)
+static void	init_available_array(bool *avail, t_data *data)
 {
 	int	i;
 
@@ -55,7 +55,7 @@ static void	restore_heap(t_heap *heap, t_coder **tmp, int count)
 /// If not, update 'cooldown_end'.
 /// """
 static bool	check_my_turn(
-		t_coder *self, t_coder *coder, int *avail, long long *cooldown_end)
+		t_coder *self, t_coder *coder, bool *avail, long long *cooldown_end)
 {
 	long long	now;
 	long long	cd_left;
@@ -74,8 +74,8 @@ static bool	check_my_turn(
 			*cooldown_end = cd_right;
 		return (false);
 	}
-	avail[coder->left_dongle_id] = 0;
-	avail[coder->right_dongle_id] = 0;
+	avail[coder->left_dongle_id] = false;
+	avail[coder->right_dongle_id] = false;
 	return (false);
 }
 
@@ -84,7 +84,7 @@ static bool	check_my_turn(
 /// can retrieve a Dongles.
 /// """
 static bool	process_poped_coder(
-		t_coder *self, t_coder *coder, int *avail, long long *cooldown_end)
+		t_coder *self, t_coder *coder, bool *avail, long long *cooldown_end)
 {
 	if (avail[coder->left_dongle_id] && avail[coder->right_dongle_id])
 	{
@@ -98,8 +98,8 @@ static bool	process_poped_coder(
 	}
 	else
 	{
-		avail[coder->left_dongle_id] = 0;
-		avail[coder->right_dongle_id] = 0;
+		avail[coder->left_dongle_id] = false;
+		avail[coder->right_dongle_id] = false;
 	}
 	return (false);
 }
