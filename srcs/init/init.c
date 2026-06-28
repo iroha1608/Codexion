@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 01:11:15 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 02:32:23 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static bool	allocate_arrays(t_data *data)
 	data->dongles = malloc(data->num_coders * sizeof(t_dongle));
 	data->dongle_conds = malloc(data->num_coders * sizeof(pthread_cond_t));
 	data->arbiter_avail = malloc(data->num_coders * sizeof(int));
-	data->arbiter_tmp = malloc(data->num_coders * sizeof(t_coder));
+	data->arbiter_tmp = malloc(data->num_coders * sizeof(t_coder *));
 	if (!data->coders || !data->dongles || !data->dongle_conds
 		|| !data->arbiter_avail || !data->arbiter_tmp)
 	{
