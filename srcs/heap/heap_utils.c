@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heap.c                                             :+:      :+:    :+:   */
+/*   heap_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 01:36:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 17:38:38 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 02:42:59 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-///
+/// Heap initialization, deallocation, and null checks;
+/// priority determination logic for schedulers (EDF/FIFO).
 /// """
 #include "../../hdrs/codexion.h"
 
 /// """
-/// FIFO, EDF
+/// Compare the two elements
+/// and determine which should be prioritized(placed at the root).
+///
+/// FIFO: In order of longest wait time.
+/// In case of a tie, in order of lowest ID.
+/// EDF: In order of most recent burnout time.
+/// In case of a tie, in order of longest wait time;
+/// if still tied, in order of lowest ID
 /// """
 int	is_higher_priority(t_coder *a, t_coder *b, int scheduler_type)
 {
@@ -37,7 +45,7 @@ int	is_higher_priority(t_coder *a, t_coder *b, int scheduler_type)
 }
 
 /// """
-///
+/// Initialize a heap (priority queue) in memory.
 /// """
 t_heap	*init_heap(int capacity, int scheduler_type)
 {
@@ -59,7 +67,8 @@ t_heap	*init_heap(int capacity, int scheduler_type)
 }
 
 /// """
-///
+/// Free the heap
+/// and its internal arrays from memory.
 /// """
 void	free_heap(t_heap *heap)
 {
@@ -72,7 +81,7 @@ void	free_heap(t_heap *heap)
 }
 
 /// """
-/// FIFO, EDF
+/// Check whether the heap is empty.
 /// """
 int	is_empty_heap(t_heap *heap)
 {

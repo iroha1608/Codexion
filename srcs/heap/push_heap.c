@@ -6,19 +6,21 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 02:04:47 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 17:40:02 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 02:48:02 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-/// Todo:
-/// - [x] 関数の切り分け
-/// - [x] 行数制限の回避
+/// Add a element to the heap.
+/// After adding it to the end,
+/// if there is a parent with a lower priority than the new element,
+/// swap them and move up the heap.
 /// """
 #include "../../hdrs/codexion.h"
 
 /// """
-///
+/// Move the added elements up to the correct posision
+/// according to its priority.
 /// """
 static void	heapify_up(t_heap *heap, int i)
 {
@@ -42,7 +44,7 @@ static void	heapify_up(t_heap *heap, int i)
 }
 
 /// """
-///
+/// Add a new element to the end of the heap and sort it.
 /// """
 void	push_heap(t_heap *heap, t_coder *coder)
 {

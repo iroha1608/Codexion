@@ -6,19 +6,22 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 18:43:07 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 17:40:08 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 02:56:03 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-/// Todo:
-/// - [x] 関数の切り分け
-/// - [ ] 行数制限の回避
+/// Retrieve an elements from the heap.
+/// After poped the root (the element with the highest priority),
+/// moved the element at the end to the root
+/// and shift the remaining elements down to their correct positions.
 /// """
 #include "../../hdrs/codexion.h"
 
 /// """
-///
+/// Select the child element with the higher priority
+/// (the one closer to the root)
+/// from the left and right child elements.
 /// """
 static int	get_smallest_child(t_heap *heap, int count, int left, int right)
 {
@@ -35,7 +38,9 @@ static int	get_smallest_child(t_heap *heap, int count, int left, int right)
 }
 
 /// """
-///
+/// Move the last element
+/// that was moved to the root down to its correct position
+/// according to its priority.
 /// """
 static void	heapify_down(t_heap *heap, int i)
 {
@@ -62,7 +67,8 @@ static void	heapify_down(t_heap *heap, int i)
 }
 
 /// """
-/// senntou toridashi saikoutiku.
+/// Pop the element with the highest priority (the root)
+/// from the heap and rebuild the tree.
 /// """
 t_coder	*pop_heap(t_heap *heap)
 {
