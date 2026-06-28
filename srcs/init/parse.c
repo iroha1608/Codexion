@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:54:45 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 19:22:02 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 00:50:27 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ bool	parse_arguments(int argc, char **argv, t_data *data)
 	if (argc != 9)
 		return (print_error("Invalid number of arguments.") == 0);
 	if (assign_arguments(argv, data) == false)
-		return (print_error("Args must be non-negative integers.") == 0);
+		return (print_error("Args must be posotive integers only.") == 0);
 	if (parse_scheduler(argv[8], data) == false)
 		return (print_error("Scheduler must be 'fifo' or 'edf'.") == 0);
 	if (data->num_coders <= 0 || data->num_compiles_required == 0)
