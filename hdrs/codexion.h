@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 22:59:49 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 01:09:15 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,9 @@ struct s_data
 	t_coder			*coders;
 	t_dongle		*dongles;
 	t_heap			*wait_queue; // Queue
+	int				*arbiter_avail; // Queue check!
+	t_coder			**arbiter_tmp;
+	// Mutex & Condition available
 	pthread_mutex_t	scheduler_mutex; // Queue waiting
 	pthread_mutex_t	time_mutex; // Get time waiting
 	pthread_mutex_t	print_mutex; // Print waiting

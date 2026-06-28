@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:40:55 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 17:37:36 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 01:15:18 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,28 +100,28 @@ static bool	process_poped_coder(
 /// """
 ///
 /// """
-bool	attempt_to_grab_dongles(t_coder *self, long long *cd_end)
+bool	attempt_to_grab_dongles(t_coder *self, long long *cooldown_end)
 {
 	int		count;
-	int		avail[256];
-	t_coder	*tmp[256];
-	t_coder	*c;
+	t_coder	*coder;
 
 	count = 0;
-	*cd_end = 0;
-	init_available_array(avail, self->data);
+	*cooldown_end = 0;
+	init_available_array(self->data->arbiter_avail, self->data);
 	while (!is_empty_heap(self->data->wait_queue))
 	{
-		c = pop_heap(self->data->wait_queue);
-		if (!c->in_queue)
+		coder = pop_heap(self->data->wait_queue);
+		if (!coder->in_queue)
 			continue ;
-		tmp[count ++] = c;
-		if (process_poped_coder(self, c, avail, cd_end))
+		self->data->arbiter_tmp[count ++] = coder;
+		if (process_poped_coder(
+				self, coder, self->data->arbiter_avail, cooldown_end))
 		{
-			restore_heap(self->data->wait_queue, tmp, count);
+			restore_heap(
+				self->data->wait_queue, self->data->arbiter_tmp, count);
 			return (true);
 		}
 	}
-	restore_heap(self->data->wait_queue, tmp, count);
+	restore_heap(self->data->wait_queue, self->data->arbiter_tmp, count);
 	return (false);
 }

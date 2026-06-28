@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 22:46:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 20:39:27 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 01:16:53 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ void	free_arrays(t_data *data)
 		free(data->dongles);
 	if (data->dongle_conds)
 		free(data->dongle_conds);
+	if (data->arbiter_avail)
+		free(data->arbiter_avail);
+	if (data->arbiter_tmp)
+		free(data->arbiter_tmp);
 }
 
 /// """
