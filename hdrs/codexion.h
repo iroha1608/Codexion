@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 01:09:15 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 01:49:16 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void		*supervisor_routine(void *arg);
 // static bool	check_all_compiled(t_data *data);
 // static bool	check_if_anyone_died(t_data *data, long long now);
 // static void	wake_up_all_coders(t_data *data);
-// static long long	get_closest_dl(t_data *data);
+// static long long	get_closest_deadline(t_data *data);
 
 // ------------------------------ arbiter.c ------------------------------
 bool		attempt_to_grab_dongles(t_coder *self, long long *cooldown_end);
@@ -166,7 +166,7 @@ bool		check_running(t_data *data);
 int			coder_request_dongles(t_coder *self);
 void		coder_release_dongles(t_coder *self);
 int			coder_print_status(t_coder *self, const char *status);
-// static void	wait_for_dongles(t_coder *self, long long cd_end);
+// static void	wait_for_dongles(t_coder *self, long long cooldown_end);
 
 // =============================== srcs/heap ===============================
 // ------------------------------ heap_pop.c ------------------------------

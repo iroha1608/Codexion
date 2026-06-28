@@ -6,17 +6,20 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:40:55 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 01:15:18 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 01:43:22 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-///
+/// When a Coder requests Dongles,
+/// arbiter decide whether to give it to them right away
+/// or it on to someone else.
 /// """
 #include "../../hdrs/codexion.h"
 
 /// """
-///
+/// Copy the current availabillity of the dongle into an array.
+/// (e.g., AVAILABLE: true, IN_USE/COOLDOWN: false)
 /// """
 static void	init_available_array(int *avail, t_data *data)
 {
@@ -31,7 +34,7 @@ static void	init_available_array(int *avail, t_data *data)
 }
 
 /// """
-///
+/// Restore the Coder retrieved from the heap.
 /// """
 static void	restore_heap(t_heap *heap, t_coder **tmp, int count)
 {
@@ -46,10 +49,13 @@ static void	restore_heap(t_heap *heap, t_coder **tmp, int count)
 }
 
 /// """
-///
+/// If the head of the heap is self,
+/// check whether it is actually accessible.
+/// If both cooldowns have ended, return true.
+/// If not, update 'cooldown_end'.
 /// """
 static bool	check_my_turn(
-		t_coder *self, t_coder *c, int *avail, long long *cd_end)
+		t_coder *self, t_coder *c, int *avail, long long *cooldown_end)
 {
 	long long	now;
 	long long	cd_left;
@@ -63,9 +69,9 @@ static bool	check_my_turn(
 		if (now >= cd_left && now >= cd_right)
 			return (true);
 		if (cd_left > cd_right)
-			*cd_end = cd_left;
+			*cooldown_end = cd_left;
 		else
-			*cd_end = cd_right;
+			*cooldown_end = cd_right;
 		return (false);
 	}
 	avail[c->left_dongle_id] = 0;
@@ -74,14 +80,15 @@ static bool	check_my_turn(
 }
 
 /// """
-///
+/// Simulation whether a Coder retrieved from the queue
+/// can retrieve a Dongles.
 /// """
 static bool	process_poped_coder(
-		t_coder *self, t_coder *c, int *avail, long long *cd_end)
+		t_coder *self, t_coder *c, int *avail, long long *cooldown_end)
 {
 	if (avail[c->left_dongle_id] && avail[c->right_dongle_id])
 	{
-		if (check_my_turn(self, c, avail, cd_end))
+		if (check_my_turn(self, c, avail, cooldown_end))
 		{
 			self->in_queue = 0;
 			self->data->dongles[self->left_dongle_id].state = IN_USE;
@@ -98,7 +105,8 @@ static bool	process_poped_coder(
 }
 
 /// """
-///
+/// Test whether Coder can acquire the dongle.
+/// (whether Coder have the highest priority.)
 /// """
 bool	attempt_to_grab_dongles(t_coder *self, long long *cooldown_end)
 {

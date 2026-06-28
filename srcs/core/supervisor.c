@@ -6,17 +6,21 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 19:12:57 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 17:36:56 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 02:05:31 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-///
+/// A Supervisor thread that monitors whether anyone has experienced
+/// a burnout or whether everyone has completed the specified
+/// number of compiles.
 /// """
 #include "../../hdrs/codexion.h"
 
 /// """
-///
+/// When the termination conditions are met,
+/// (check_if anyone_died or check_all_compiled)
+/// a signal is sent to all waiting Coders.
 /// """
 static void	wake_up_all_coders(t_data *data)
 {
@@ -33,7 +37,8 @@ static void	wake_up_all_coders(t_data *data)
 }
 
 /// """
-///
+/// Check the time until burnout for all Coders,
+/// and if any coder has reached burnout, issue a burnout declaration.
 /// """
 static bool	check_if_anyone_died(t_data *data, long long now)
 {
@@ -60,7 +65,7 @@ static bool	check_if_anyone_died(t_data *data, long long now)
 }
 
 /// """
-///
+/// Check whether all Coders has comiled the required number of times.
 /// """
 static bool	check_all_compiled(t_data *data)
 {
@@ -80,28 +85,30 @@ static bool	check_all_compiled(t_data *data)
 }
 
 /// """
-///
+/// Get the burnout time closest to the current time from all Coders.
 /// """
-static long long	get_closest_dl(t_data *data)
+static long long	get_closest_deadline(t_data *data)
 {
 	long long		closest;
-	long long		dl;
+	long long		deadline;
 	int				i;
 
 	closest = -1;
 	i = 0;
 	while (i < data->num_coders)
 	{
-		dl = data->coders[i].last_compile_start + data->time_to_burnout;
-		if (closest == -1 || dl < closest)
-			closest = dl;
+		deadline = data->coders[i].last_compile_start + data->time_to_burnout;
+		if (closest == -1 || deadline < closest)
+			closest = deadline;
 		i ++;
 	}
 	return (closest);
 }
 
 /// """
-///
+/// The main loop for each Supervisor thread.
+/// Instead of monitoring constantly,
+/// wait using 'pthread_cond_timedwait' until the next time someone burnout.
 /// """
 void	*supervisor_routine(void *arg)
 {
@@ -116,7 +123,7 @@ void	*supervisor_routine(void *arg)
 		now = get_time();
 		if (check_all_compiled(data) || check_if_anyone_died(data, now))
 			break ;
-		set_timespec(&ts, get_closest_dl(data));
+		set_timespec(&ts, get_closest_deadline(data));
 		pthread_cond_timedwait(&data->sv_cond, &data->time_mutex, &ts);
 	}
 	pthread_mutex_unlock(&data->time_mutex);
