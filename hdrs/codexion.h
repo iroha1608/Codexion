@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 01:49:16 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 03:00:36 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,9 +149,9 @@ bool		attempt_to_grab_dongles(t_coder *self, long long *cooldown_end);
 // static void	init_available_array(int *abail, t_data *data)
 // static void	restore_heap(t_heap *heap, t_coder **tmp, int count)
 // static bool	process_poped_coder(
-// 		t_coder *self, t_coder *c, int *avail, long long *cooldown_end)
+// 		t_coder *self, t_coder *coder, int *avail, long long *cooldown_end)
 // static bool	check_my_turn(
-// 		t_coder *self, t_coder *c, int *avail, long long *cooldown_end)
+// 		t_coder *self, t_coder *coder, int *avail, long long *cooldown_end)
 
 // ============================== srcs/coder ===============================
 // ------------------------------- coder.c --------------------------------

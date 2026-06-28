@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:40:55 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 01:43:22 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 02:58:46 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,16 @@ static void	restore_heap(t_heap *heap, t_coder **tmp, int count)
 /// If not, update 'cooldown_end'.
 /// """
 static bool	check_my_turn(
-		t_coder *self, t_coder *c, int *avail, long long *cooldown_end)
+		t_coder *self, t_coder *coder, int *avail, long long *cooldown_end)
 {
 	long long	now;
 	long long	cd_left;
 	long long	cd_right;
 
-	if (c->id == self->id)
+	if (coder->id == self->id)
 	{
 		now = get_time();
-		cd_left = self->data->dongles[c->left_dongle_id].available_time;
+		cd_left = self->data->dongles[self->left_dongle_id].available_time;
 		cd_right = self->data->dongles[self->right_dongle_id].available_time;
 		if (now >= cd_left && now >= cd_right)
 			return (true);
@@ -74,8 +74,8 @@ static bool	check_my_turn(
 			*cooldown_end = cd_right;
 		return (false);
 	}
-	avail[c->left_dongle_id] = 0;
-	avail[c->right_dongle_id] = 0;
+	avail[coder->left_dongle_id] = 0;
+	avail[coder->right_dongle_id] = 0;
 	return (false);
 }
 
@@ -84,11 +84,11 @@ static bool	check_my_turn(
 /// can retrieve a Dongles.
 /// """
 static bool	process_poped_coder(
-		t_coder *self, t_coder *c, int *avail, long long *cooldown_end)
+		t_coder *self, t_coder *coder, int *avail, long long *cooldown_end)
 {
-	if (avail[c->left_dongle_id] && avail[c->right_dongle_id])
+	if (avail[coder->left_dongle_id] && avail[coder->right_dongle_id])
 	{
-		if (check_my_turn(self, c, avail, cooldown_end))
+		if (check_my_turn(self, coder, avail, cooldown_end))
 		{
 			self->in_queue = 0;
 			self->data->dongles[self->left_dongle_id].state = IN_USE;
@@ -98,8 +98,8 @@ static bool	process_poped_coder(
 	}
 	else
 	{
-		avail[c->left_dongle_id] = 0;
-		avail[c->right_dongle_id] = 0;
+		avail[coder->left_dongle_id] = 0;
+		avail[coder->right_dongle_id] = 0;
 	}
 	return (false);
 }
