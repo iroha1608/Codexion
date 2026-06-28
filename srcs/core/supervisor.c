@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 19:12:57 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 02:05:31 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 02:33:44 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ static bool	check_all_compiled(t_data *data)
 {
 	int	i;
 
-	if (data->num_compiles_required == -1)
-		return (false);
 	i = 0;
 	while (i < data->num_coders)
 	{
