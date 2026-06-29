@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 19:12:57 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 16:11:48 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 16:28:05 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ static bool	check_if_anyone_died(t_data *data, long long now)
 				(now - data->simulation_start_time) / 1000LL,
 				data->coders[i].id);
 			pthread_mutex_unlock(&data->print_mutex);
-			stop_simulation(data);
 			return (true);
 		}
 		i ++;
@@ -83,7 +82,6 @@ static bool	check_all_compiled(t_data *data)
 			return (false);
 		i ++;
 	}
-	stop_simulation(data);
 	return (true);
 }
 
@@ -125,7 +123,11 @@ void	*supervisor_routine(void *arg)
 	{
 		now = get_time();
 		if (check_all_compiled(data) || check_if_anyone_died(data, now))
-			break ;
+		{
+			pthread_mutex_unlock(&data->time_mutex);
+			stop_simulation(data);
+			return (NULL);
+		}
 		set_timespec(&ts, get_closest_deadline(data));
 		pthread_cond_timedwait(&data->sv_cond, &data->time_mutex, &ts);
 	}
