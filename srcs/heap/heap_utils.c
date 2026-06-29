@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 01:36:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 02:42:59 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 01:04:41 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,6 @@ t_heap	*init_heap(int capacity, int scheduler_type)
 	heap->capacity = capacity;
 	heap->scheduler_type = scheduler_type;
 	return (heap);
-}
-
-/// """
-/// Free the heap
-/// and its internal arrays from memory.
-/// """
-void	free_heap(t_heap *heap)
-{
-	if (heap)
-	{
-		if (heap->data)
-			free(heap->data);
-		free(heap);
-	}
 }
 
 /// """
