@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/25 16:54:22 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 22:59:43 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 16:14:57 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,10 @@ int	coder_print_status(t_coder *self, const char *status)
 	now_milli = now_micro / 1000LL;
 	if (printf("%lld %d %s\n", now_milli, self->id, status) < 0)
 	{
-		self->data->is_simulation_running = false;
-		pthread_cond_broadcast(&self->data->exit_cond);
+		pthread_mutex_unlock(&self->data->print_mutex);
+		pthread_mutex_unlock(&self->data->time_mutex);
+		stop_simulation(self->data);
+		return (false);
 	}
 	pthread_mutex_unlock(&self->data->print_mutex);
 	pthread_mutex_unlock(&self->data->time_mutex);

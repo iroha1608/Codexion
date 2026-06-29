@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 17:51:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 23:07:13 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 16:18:10 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,7 @@ void	run_supervisor_and_wait(t_data *data)
 	if (pthread_create(&sv_thread, NULL, supervisor_routine, data) != 0)
 	{
 		print_error("Failed to create supervisor thread.");
-		pthread_mutex_lock(&data->time_mutex);
-		data->is_simulation_running = false;
-		pthread_cond_broadcast(&data->exit_cond);
-		pthread_mutex_unlock(&data->time_mutex);
+		stop_simulation(data);
 	}
 	else
 		if (pthread_join(sv_thread, NULL) != 0)

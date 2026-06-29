@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 03:11:03 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 16:10:07 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,9 @@ void		rollback_conds(t_data *data, int count);
 // ============================== srcs/core ===============================
 // ----------------------------- supervisor.c -----------------------------
 void		*supervisor_routine(void *arg);
+void		stop_simulation(t_data *data);
 // static bool	check_all_compiled(t_data *data);
 // static bool	check_if_anyone_died(t_data *data, long long now);
-// static void	wake_up_all_coders(t_data *data);
 // static long long	get_closest_deadline(t_data *data);
 
 // ------------------------------ arbiter.c ------------------------------

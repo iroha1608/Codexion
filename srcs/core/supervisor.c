@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 19:12:57 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 02:33:44 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 16:11:48 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,23 @@
 /// (check_if anyone_died or check_all_compiled)
 /// a signal is sent to all waiting Coders.
 /// """
-static void	wake_up_all_coders(t_data *data)
+void	stop_simulation(t_data *data)
 {
 	int	j;
 
+	pthread_mutex_lock(&data->time_mutex);
 	data->is_simulation_running = false;
 	pthread_cond_broadcast(&data->exit_cond);
+	pthread_cond_broadcast(&data->sv_cond);
+	pthread_mutex_unlock(&data->time_mutex);
+	pthread_mutex_lock(&data->scheduler_mutex);
 	j = 0;
 	while (j < data->num_coders)
 	{
 		pthread_cond_broadcast(&data->dongle_conds[j]);
 		j ++;
 	}
+	pthread_mutex_unlock(&data->scheduler_mutex);
 }
 
 /// """
@@ -56,7 +61,7 @@ static bool	check_if_anyone_died(t_data *data, long long now)
 				(now - data->simulation_start_time) / 1000LL,
 				data->coders[i].id);
 			pthread_mutex_unlock(&data->print_mutex);
-			wake_up_all_coders(data);
+			stop_simulation(data);
 			return (true);
 		}
 		i ++;
@@ -78,7 +83,7 @@ static bool	check_all_compiled(t_data *data)
 			return (false);
 		i ++;
 	}
-	wake_up_all_coders(data);
+	stop_simulation(data);
 	return (true);
 }
 
