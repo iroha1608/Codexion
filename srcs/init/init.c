@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 01:11:30 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 02:03:57 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,14 +137,13 @@ int	init_data(t_data *data)
 		rollback_mutexes_and_conds(data);
 		return (false);
 	}
-	if (!init_coders_and_conds(data))
+	if (init_coders_and_conds(data) == false)
 	{
 		free_arrays(data);
 		rollback_mutexes_and_conds(data);
 		return (false);
 	}
-	data->wait_queue = init_heap(data->num_coders, data->scheduler_type);
-	if (!data->wait_queue)
+	if (init_heap(data) == false)
 	{
 		rollback_dongle_conds(data, data->num_coders);
 		free_arrays(data);

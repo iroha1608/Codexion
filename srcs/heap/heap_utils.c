@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 01:36:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 01:04:41 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 01:55:37 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,23 +47,24 @@ int	is_higher_priority(t_coder *a, t_coder *b, int scheduler_type)
 /// """
 /// Initialize a heap (priority queue) in memory.
 /// """
-t_heap	*init_heap(int capacity, int scheduler_type)
+bool	init_heap(t_data *data)
 {
 	t_heap	*heap;
 
 	heap = malloc(sizeof(t_heap));
 	if (!heap)
-		return (NULL);
-	heap->data = malloc(capacity * sizeof(t_coder *));
+		return (false);
+	heap->data = malloc(data->num_coders * sizeof(t_coder *));
 	if (!heap->data)
 	{
 		free(heap);
-		return (NULL);
+		return (false);
 	}
 	heap->size = 0;
-	heap->capacity = capacity;
-	heap->scheduler_type = scheduler_type;
-	return (heap);
+	heap->capacity = data->num_coders;
+	heap->scheduler_type = data->scheduler_type;
+	data->wait_queue = heap;
+	return (true);
 }
 
 /// """
