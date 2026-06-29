@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:40:55 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 06:09:14 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 06:46:18 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ bool	attempt_to_grab_dongles(t_coder *self, long long *cooldown_end)
 				self, coder, self->data->arbiter_avail, cooldown_end))
 		{
 			restore_heap(
-				self->data->wait_queue, self->data->arbiter_tmp, count);
+				self->data->wait_queue, self->data->arbiter_tmp, count - 1);
 			return (true);
 		}
 	}
