@@ -6,13 +6,11 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:34:51 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 02:14:08 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 16:40:17 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /// """
-/// Todo:
-/// - [ ] gettimeofday()のエラーハンドリング
 /// """
 #include "../../hdrs/codexion.h"
 
@@ -41,8 +39,8 @@ void	set_timespec(struct timespec *ts, long long time)
 }
 
 /// """
-/// No huristic. use exit_cond wait timeout.
-/// exit_condにシグナルが来たら即起床。
+/// No huristic. Use exit_cond wait timeout.
+/// Catch signal of exit_cond, 
 /// """
 void	precise_sleep(long long sleep_time, t_data *data)
 {

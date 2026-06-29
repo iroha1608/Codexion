@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 16:10:07 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 16:39:15 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,15 @@ struct s_data
 	bool			*arbiter_avail; // Queue check!
 	t_coder			**arbiter_tmp;
 	// Mutex & Condition available
-	pthread_mutex_t	scheduler_mutex; // Queue waiting
-	pthread_mutex_t	time_mutex; // Get time waiting
-	pthread_mutex_t	print_mutex; // Print waiting
+   	// wait_queue, dongles, in_queue
+	pthread_mutex_t	scheduler_mutex;
+   	// is_simulation_running, ready_count, last_compile_start, deadline
+	pthread_mutex_t	time_mutex;
+	// print_error, coder_print_status
+	pthread_mutex_t	print_mutex;
+	// Signel to Coder for waiting dongle
 	pthread_cond_t	*dongle_conds;
+	// Signal to Supervisor
 	pthread_cond_t	sv_cond;
 	pthread_cond_t	exit_cond;
 };
