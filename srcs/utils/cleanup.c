@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 22:46:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 00:59:55 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 03:30:37 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,20 @@ void	free_heap(t_heap *heap)
 /// Destroy the mutex and condition variables
 /// that were successfully initialized.
 /// """
-void	rollback_mutexes_and_conds(t_data *data)
+void	rollback_mutexes_and_conds(t_data *data, int stage)
 {
-	pthread_mutex_destroy(&data->time_mutex);
-	pthread_mutex_destroy(&data->scheduler_mutex);
-	pthread_mutex_destroy(&data->print_mutex);
-	pthread_cond_destroy(&data->sv_cond);
-	pthread_cond_destroy(&data->start_cond);
-	pthread_cond_destroy(&data->exit_cond);
+	if (stage >= 1)
+		pthread_mutex_destroy(&data->time_mutex);
+	if (stage >= 2)
+		pthread_mutex_destroy(&data->scheduler_mutex);
+	if (stage >= 3)
+		pthread_mutex_destroy(&data->print_mutex);
+	if (stage >= 4)
+		pthread_cond_destroy(&data->sv_cond);
+	if (stage >= 5)
+		pthread_cond_destroy(&data->start_cond);
+	if (stage >= 6)
+		pthread_cond_destroy(&data->exit_cond);
 }
 
 /// """
@@ -85,5 +91,5 @@ void	cleanup_data(t_data *data)
 	free_heap(data->wait_queue);
 	rollback_dongle_conds(data, data->num_coders);
 	free_arrays(data);
-	rollback_mutexes_and_conds(data);
+	rollback_mutexes_and_conds(data, 6);
 }

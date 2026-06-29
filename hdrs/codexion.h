@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 02:00:41 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 03:29:12 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,16 +138,20 @@ bool		parse_arguments(int argc, char **argv, t_data *data);
 
 // ------------------------------- init.c -------------------------------
 int			init_data(t_data *data);
-// static bool	init_mutexes(t_data *data);
-// static bool	init_conds(t_data *data);
-// static bool	allocate_arrays(t_data *data);
-// static bool	init_coders_and_conds(t_data *data);
-//
+// static void	abort_init(t_data *data, const char *msg, int stage)
+
+// ----------------------------- init_utils.c -----------------------------
+bool		init_mutexes(t_data *data);
+bool		init_conds(t_data *data);
+bool		allocate_arrays(t_data *data);
+bool		init_coders_and_conds(t_data *data);
+bool		init_heap(t_data *data);
+
 // ------------------------------ cleanup.c ------------------------------
 void		cleanup_data(t_data *data);
 void		free_arrays(t_data *data);
 void		free_heap(t_heap *heap);
-void		rollback_mutexes_and_conds(t_data *data);
+void		rollback_mutexes_and_conds(t_data *data, int stage);
 void		rollback_dongle_conds(t_data *data, int count);
 
 // ============================== srcs/core ===============================
@@ -194,7 +198,6 @@ void		push_heap(t_heap *heap, t_coder *coder);
 // static void	heapify_up(t_heap *heap, int i);
 
 // ------------------------------ heap_utils.c -----------------------------
-bool		init_heap(t_data *data);
 int			is_higher_priority(t_coder *a, t_coder *b, int scheduler_type);
 int			is_empty_heap(t_heap *heap);
 
