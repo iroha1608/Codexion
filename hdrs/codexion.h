@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 16:39:15 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 01:02:57 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef enum e_dongle_state
 // Dongle
 typedef struct s_dongle
 {
+	// (Initialized 'init_coders_and_conds()')
 	int				id;
 	t_dongle_state	state;
 	long long		available_time;
@@ -45,27 +46,28 @@ typedef struct s_dongle
 // Actor: Coder
 struct s_coder
 {
+	// (Initialized 'init_coders_and_conds()')
 	int			id; // 1 ~ N
-	pthread_t	thread_id;
 	int			left_dongle_id;
 	int			right_dongle_id;
-
-	long long	last_compile_start;
 	int			compile_count;
-	long long	request_time; // FIFO
-	long long	deadline; // EDF
-	int			in_queue;
 	t_data		*data;
-
 	void		*(*run)(void *arg);
 	int			(*request_dongles)(t_coder *self);
 	void		(*release_dongles)(t_coder *self);
 	int			(*print_status)(t_coder *self, const char *status);
+	//
+	pthread_t	thread_id;
+	long long	last_compile_start;
+	long long	request_time; // FIFO
+	long long	deadline; // EDF
+	int			in_queue;
 };
 
 // Heap (Queue)
 struct s_heap
 {
+	// (Initialized 'init_heap()')
 	t_coder	**data;
 	int		size;
 	int		capacity;
@@ -75,7 +77,7 @@ struct s_heap
 // System Data
 struct s_data
 {
-	// Argument data
+	// Argument data (Initialized arg_parse())
 	int				num_coders;
 	long long		time_to_burnout;
 	long long		time_to_compile;
@@ -85,28 +87,34 @@ struct s_data
 	long long		dongle_cooldown;
 	int				scheduler_type; // 0 : FIFO, 1 : EDF
 	// running state
+	// (Initialized 'init_data')
+	bool			is_simulation_running;
+	//
 	long long		simulation_start_time;
-	bool			is_simulation_running; // 0 : All thread complete
 	bool			init_error;
 	int				ready_count; // Ready complete thread count
-	pthread_cond_t	start_cond; // issei start you no joukenhensuu
-	// Array
+	// Array (Initialized 'allocate_arrays()')
 	t_coder			*coders;
 	t_dongle		*dongles;
-	t_heap			*wait_queue; // Queue
 	bool			*arbiter_avail; // Queue check!
 	t_coder			**arbiter_tmp;
+	// (Initialized 'init_data()')
+	t_heap			*wait_queue; // Queue
 	// Mutex & Condition available
-   	// wait_queue, dongles, in_queue
-	pthread_mutex_t	scheduler_mutex;
-   	// is_simulation_running, ready_count, last_compile_start, deadline
+	// (Initialized 'init_mutexes/conds/coders_and_conds()')
+	// is_simulation_running, ready_count, last_compile_start, deadline
 	pthread_mutex_t	time_mutex;
+	// wait_queue, dongles, in_queue
+	pthread_mutex_t	scheduler_mutex;
 	// print_error, coder_print_status
 	pthread_mutex_t	print_mutex;
-	// Signel to Coder for waiting dongle
+	// Signal to Coder for waiting dongle
 	pthread_cond_t	*dongle_conds;
 	// Signal to Supervisor
 	pthread_cond_t	sv_cond;
+	// Signal to Coder for waiting start
+	pthread_cond_t	start_cond;
+	// Signal to Coder for waiting exit
 	pthread_cond_t	exit_cond;
 };
 
@@ -130,16 +138,17 @@ bool		parse_arguments(int argc, char **argv, t_data *data);
 
 // ------------------------------- init.c -------------------------------
 int			init_data(t_data *data);
-// static bool	init_sys_mutex_1(t_data *data);
-// static bool	init_sys_mutex_2(t_data *data);
+// static bool	init_mutexes(t_data *data);
+// static bool	init_conds(t_data *data);
 // static bool	allocate_arrays(t_data *data);
 // static bool	init_coders_and_conds(t_data *data);
 //
 // ------------------------------ cleanup.c ------------------------------
 void		cleanup_data(t_data *data);
 void		free_arrays(t_data *data);
-void		rollback_system_mutexes(t_data *data);
-void		rollback_conds(t_data *data, int count);
+void		free_heap(t_heap *heap);
+void		rollback_mutexes_and_conds(t_data *data);
+void		rollback_dongle_conds(t_data *data, int count);
 
 // ============================== srcs/core ===============================
 // ----------------------------- supervisor.c -----------------------------
@@ -187,7 +196,6 @@ void		push_heap(t_heap *heap, t_coder *coder);
 // ------------------------------ heap_utils.c -----------------------------
 int			is_higher_priority(t_coder *a, t_coder *b, int scheduler_type);
 t_heap		*init_heap(int capacity, int scheduler_type);
-void		free_heap(t_heap *heap);
 int			is_empty_heap(t_heap *heap);
 
 // ============================== srcs/utils ==============================
