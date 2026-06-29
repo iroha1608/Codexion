@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:06:39 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 22:17:22 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 01:07:01 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,17 @@ int	main(int argc, char **argv)
 	t_data		data;
 
 	if (memset(&data, 0, sizeof(t_data)) == NULL)
+	{
+		print_error("Failed to 'memset()'.");
 		return (1);
+	}
 	if (parse_arguments(argc, argv, &data) == false)
 		return (1);
 	if (init_data(&data) == false)
+	{
+		print_error("Failed to initialization.");
 		return (1);
+	}
 	if (start_simulation(&data) == false)
 	{
 		cleanup_data(&data);
