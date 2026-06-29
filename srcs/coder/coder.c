@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:41:03 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 22:41:11 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 03:55:20 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	wait_for_start_signal(t_coder *self)
 	self->data->ready_count ++;
 	if (self->data->ready_count == self->data->num_coders)
 		pthread_cond_signal(&self->data->sv_cond);
-	while (!self->data->is_simulation_running)
+	while (self->data->is_simulation_running == false)
 		pthread_cond_wait(&self->data->start_cond, &self->data->time_mutex);
 	pthread_mutex_unlock(&self->data->time_mutex);
 }

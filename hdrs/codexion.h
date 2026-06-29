@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 03:29:12 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 03:40:41 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,9 @@ void		wait_all_threads(t_data *data, int create_count);
 // ============================== srcs/init ==============================
 // =------------------------------ parse.c -------------------------------
 bool		parse_arguments(int argc, char **argv, t_data *data);
-// static bool	parse_scheduler(char *arg, t_data *data);
 // static bool	assign_arguments(char **argv, t_data *data);
 // static bool	ft_atol(const char *str, long long *result);
+// static bool	parse_scheduler(char *arg, t_data *data);
 
 // ------------------------------- init.c -------------------------------
 int			init_data(t_data *data);
@@ -146,13 +146,6 @@ bool		init_conds(t_data *data);
 bool		allocate_arrays(t_data *data);
 bool		init_coders_and_conds(t_data *data);
 bool		init_heap(t_data *data);
-
-// ------------------------------ cleanup.c ------------------------------
-void		cleanup_data(t_data *data);
-void		free_arrays(t_data *data);
-void		free_heap(t_heap *heap);
-void		rollback_mutexes_and_conds(t_data *data, int stage);
-void		rollback_dongle_conds(t_data *data, int count);
 
 // ============================== srcs/core ===============================
 // ----------------------------- supervisor.c -----------------------------
@@ -209,5 +202,12 @@ void		precise_sleep(long long sleep_time, t_data *data);
 
 // ------------------------------- print.c -------------------------------
 int			print_error(const char *msg);
+
+// ------------------------------ cleanup.c ------------------------------
+void		cleanup_data(t_data *data);
+void		free_arrays(t_data *data);
+void		free_heap(t_heap *heap);
+void		rollback_mutexes_and_conds(t_data *data, int stage);
+void		rollback_dongle_conds(t_data *data, int count);
 
 #endif

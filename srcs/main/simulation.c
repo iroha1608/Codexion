@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 17:51:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 02:11:24 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 03:58:57 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,7 @@ static void	handle_create_error(t_data *data, int create_count)
 {
 	print_error("Failed to create thread.");
 	pthread_mutex_lock(&data->time_mutex);
-	data->is_simulation_running = false;
 	pthread_cond_broadcast(&data->start_cond);
-	pthread_cond_broadcast(&data->exit_cond);
 	pthread_mutex_unlock(&data->time_mutex);
 	wait_all_threads(data, create_count);
 }
@@ -114,7 +112,7 @@ bool	start_simulation(t_data *data)
 				data->coders[i].run, &data->coders[i]) != 0)
 		{
 			handle_create_error(data, i);
-			return (false)
+			return (false);
 		}
 		i ++;
 	}

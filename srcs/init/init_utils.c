@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 03:12:28 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 03:34:17 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 03:45:07 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@
 bool	init_mutexes(t_data *data)
 {
 	if (pthread_mutex_init(&data->time_mutex, NULL) != 0)
-	{
-		rollback_mutexes_and_conds(data, 0);
 		return (false);
-	}
 	if (pthread_mutex_init(&data->scheduler_mutex, NULL) != 0)
 	{
 		rollback_mutexes_and_conds(data, 1);
