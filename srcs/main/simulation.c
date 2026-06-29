@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 17:51:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 16:18:10 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 02:11:24 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	run_supervisor_and_wait(t_data *data)
 /// that have already been created and are waiting,
 /// then terminate after safely merging them.
 /// """
-static bool	handle_create_error(t_data *data, int create_count)
+static void	handle_create_error(t_data *data, int create_count)
 {
 	print_error("Failed to create thread.");
 	pthread_mutex_lock(&data->time_mutex);
@@ -71,7 +71,6 @@ static bool	handle_create_error(t_data *data, int create_count)
 	pthread_cond_broadcast(&data->exit_cond);
 	pthread_mutex_unlock(&data->time_mutex);
 	wait_all_threads(data, create_count);
-	return (false);
 }
 
 /// """
@@ -113,7 +112,10 @@ bool	start_simulation(t_data *data)
 	{
 		if (pthread_create(&data->coders[i].thread_id, NULL,
 				data->coders[i].run, &data->coders[i]) != 0)
-			return (handle_create_error(data, i));
+		{
+			handle_create_error(data, i);
+			return (false)
+		}
 		i ++;
 	}
 	sync_and_start(data);

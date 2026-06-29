@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 01:02:57 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 02:00:41 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ typedef struct s_dongle
 // Actor: Coder
 struct s_coder
 {
+	// (Initialized 'pthread_create()')
+	pthread_t	thread_id;
 	// (Initialized 'init_coders_and_conds()')
 	int			id; // 1 ~ N
 	int			left_dongle_id;
@@ -56,8 +58,6 @@ struct s_coder
 	int			(*request_dongles)(t_coder *self);
 	void		(*release_dongles)(t_coder *self);
 	int			(*print_status)(t_coder *self, const char *status);
-	//
-	pthread_t	thread_id;
 	long long	last_compile_start;
 	long long	request_time; // FIFO
 	long long	deadline; // EDF
@@ -126,7 +126,7 @@ struct s_data
 bool		start_simulation(t_data *data);
 void		run_supervisor_and_wait(t_data *data);
 void		wait_all_threads(t_data *data, int create_count);
-// static bool	handle_create_error(t_data *data, int create_count);
+// static void	handle_create_error(t_data *data, int create_count);
 // static void	sync_and_start(t_data *data);
 
 // ============================== srcs/init ==============================
@@ -194,8 +194,8 @@ void		push_heap(t_heap *heap, t_coder *coder);
 // static void	heapify_up(t_heap *heap, int i);
 
 // ------------------------------ heap_utils.c -----------------------------
+bool		init_heap(t_data *data);
 int			is_higher_priority(t_coder *a, t_coder *b, int scheduler_type);
-t_heap		*init_heap(int capacity, int scheduler_type);
 int			is_empty_heap(t_heap *heap);
 
 // ============================== srcs/utils ==============================

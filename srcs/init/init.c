@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 02:03:57 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 02:11:33 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,5 @@ int	init_data(t_data *data)
 		rollback_mutexes_and_conds(data);
 		return (false);
 	}
-	data->is_simulation_running = true;
 	return (true);
 }
