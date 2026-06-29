@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:46:42 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/27 23:13:28 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/29 23:02:11 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 /// """
 int	print_error(const char *msg)
 {
-	if (fprintf(stderr, "Error: %s\n", msg) < 0)
-		return (1);
+	fprintf(stderr, "Error: %s\n", msg);
 	return (1);
 }
