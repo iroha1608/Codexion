@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:41:03 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 03:55:20 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 05:48:51 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static void	wait_for_start_signal(t_coder *self)
 	self->data->ready_count ++;
 	if (self->data->ready_count == self->data->num_coders)
 		pthread_cond_signal(&self->data->sv_cond);
-	while (self->data->is_simulation_running == false)
+	while (self->data->is_simulation_running == false
+			&& self->data->init_error == false)
 		pthread_cond_wait(&self->data->start_cond, &self->data->time_mutex);
 	pthread_mutex_unlock(&self->data->time_mutex);
 }
@@ -93,8 +94,7 @@ void	*coder_routine(void *arg)
 		precise_sleep(1000, self->data);
 	while (check_running(self->data))
 	{
-		if (self->data->num_compiles_required != -1
-			&& self->data->num_compiles_required <= self->compile_count)
+		if (self->data->num_compiles_required <= self->compile_count)
 			break ;
 		if (!self->request_dongles(self))
 			break ;

@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 17:51:49 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 03:58:57 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 05:15:32 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	wait_all_threads(t_data *data, int create_count)
 	while (i < create_count)
 	{
 		if (pthread_join(data->coders[i].thread_id, NULL) != 0)
-			print_error("Failed to join coder thread.");
+			print_error("Failed to join Coder thread.");
 		i ++;
 	}
 }
@@ -48,12 +48,12 @@ void	run_supervisor_and_wait(t_data *data)
 
 	if (pthread_create(&sv_thread, NULL, supervisor_routine, data) != 0)
 	{
-		print_error("Failed to create supervisor thread.");
+		print_error("Failed to create Supervisor thread.");
 		stop_simulation(data);
 	}
 	else
 		if (pthread_join(sv_thread, NULL) != 0)
-			print_error("Failed to join coder thread.");
+			print_error("Failed to join Supervisor thread.");
 }
 
 /// """
@@ -66,6 +66,7 @@ static void	handle_create_error(t_data *data, int create_count)
 {
 	print_error("Failed to create thread.");
 	pthread_mutex_lock(&data->time_mutex);
+	data->init_error = true;
 	pthread_cond_broadcast(&data->start_cond);
 	pthread_mutex_unlock(&data->time_mutex);
 	wait_all_threads(data, create_count);
@@ -105,6 +106,7 @@ bool	start_simulation(t_data *data)
 	int	i;
 
 	data->is_simulation_running = false;
+	data->init_error = false;
 	i = 0;
 	while (i < data->num_coders)
 	{

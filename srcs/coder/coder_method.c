@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/25 16:54:22 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 16:14:57 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 04:48:41 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	coder_print_status(t_coder *self, const char *status)
 	long long	now_milli;
 
 	pthread_mutex_lock(&self->data->time_mutex);
-	if (!self->data->is_simulation_running)
+	if (self->data->is_simulation_running == false)
 	{
 		pthread_mutex_unlock(&self->data->time_mutex);
 		return (false);
