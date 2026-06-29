@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:54:45 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 00:50:27 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 01:03:49 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,24 @@ static bool	assign_arguments(char **argv, t_data *data)
 bool	parse_arguments(int argc, char **argv, t_data *data)
 {
 	if (argc != 9)
-		return (print_error("Invalid number of arguments.") == 0);
+	{
+		print_error("Invalid number of arguments.");
+		return (false);
+	}
 	if (assign_arguments(argv, data) == false)
-		return (print_error("Args must be posotive integers only.") == 0);
+	{
+		print_error("Args must be posotive integers only.");
+		return (false);
+	}
 	if (parse_scheduler(argv[8], data) == false)
-		return (print_error("Scheduler must be 'fifo' or 'edf'.") == 0);
-	if (data->num_coders <= 0 || data->num_compiles_required == 0)
-		return (print_error("Invalid coder count or 0 compiles.") == 0);
+	{
+		print_error("Scheduler must be 'fifo' or 'edf'.");
+		return (false);
+	}
+	if (data->num_coders == 0 || data->num_compiles_required == 0)
+	{
+		print_error("Invalid coder count or 0 compiles.");
+		return (false);
+	}
 	return (true);
 }
