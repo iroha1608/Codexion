@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 21:34:51 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 16:40:17 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 05:44:10 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 #include "../../hdrs/codexion.h"
 
 /// """
-/// inside time get micro second.
+/// 現在の時刻をマイクロ秒で取得する
+/// 'gettimeofday()'は引数が正しければ失敗しない.
+/// 秒をマイクロ秒に変換し、マイクロ秒を足して返す
 /// """
 long long	get_time(void)
 {
@@ -30,7 +32,8 @@ long long	get_time(void)
 }
 
 /// """
-/// micro second -> timespec
+/// time: 一番近いデッドライン
+/// pthread_cond_timedwaitに渡すため,マイクロ秒を秒/ナノ秒に変換する
 /// """
 void	set_timespec(struct timespec *ts, long long time)
 {
@@ -39,8 +42,9 @@ void	set_timespec(struct timespec *ts, long long time)
 }
 
 /// """
+/// 指定された時間(マイクロ秒)スレッドをスリープさせる。
 /// No huristic. Use exit_cond wait timeout.
-/// Catch signal of exit_cond, 
+/// Catch signal of exit_cond,
 /// """
 void	precise_sleep(long long sleep_time, t_data *data)
 {

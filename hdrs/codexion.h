@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 16:52:11 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 03:40:41 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 06:29:45 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ typedef struct s_heap	t_heap;
 typedef enum e_dongle_state
 {
 	AVAILABLE,
-	IN_USE,
-	COOLDOWN
+	IN_USE
 }	t_dongle_state;
 
 // Dongle

@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 19:12:57 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 16:28:05 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 06:23:02 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static bool	check_if_anyone_died(t_data *data, long long now)
 		if (now >= deadline)
 		{
 			pthread_mutex_lock(&data->print_mutex);
-			printf("%lld %d burned out\n",
+			printf("%lld %d \33[31mburned out\n",
 				(now - data->simulation_start_time) / 1000LL,
 				data->coders[i].id);
 			pthread_mutex_unlock(&data->print_mutex);
@@ -90,12 +90,12 @@ static bool	check_all_compiled(t_data *data)
 /// """
 static long long	get_closest_deadline(t_data *data)
 {
+	int				i;
 	long long		closest;
 	long long		deadline;
-	int				i;
 
-	closest = -1;
 	i = 0;
+	closest = -1;
 	while (i < data->num_coders)
 	{
 		deadline = data->coders[i].last_compile_start + data->time_to_burnout;

@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:41:03 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/30 05:48:51 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 06:00:36 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ bool	check_running(t_data *data)
 
 /// """
 /// Perform a 'Compile' after obtaining the Dongles.
+/// Signal to Supervisor burnout time kousin
 /// """
 static void	perform_compile(t_coder *self)
 {
@@ -96,7 +97,7 @@ void	*coder_routine(void *arg)
 	{
 		if (self->data->num_compiles_required <= self->compile_count)
 			break ;
-		if (!self->request_dongles(self))
+		if (self->request_dongles(self) == false)
 			break ;
 		perform_compile(self);
 		self->release_dongles(self);

@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 16:40:55 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 03:13:55 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 06:09:14 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ bool	attempt_to_grab_dongles(t_coder *self, long long *cooldown_end)
 	count = 0;
 	*cooldown_end = 0;
 	init_available_array(self->data->arbiter_avail, self->data);
-	while (!is_empty_heap(self->data->wait_queue))
+	while (is_empty_heap(self->data->wait_queue) == false)
 	{
 		coder = pop_heap(self->data->wait_queue);
 		if (!coder->in_queue)
