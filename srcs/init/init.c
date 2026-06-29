@@ -6,7 +6,7 @@
 /*   By: nsato <nsato@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 17:22:44 by nsato             #+#    #+#             */
-/*   Updated: 2026/06/29 03:12:32 by nsato            ###   ########.fr       */
+/*   Updated: 2026/06/30 01:11:30 by nsato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,61 +17,61 @@
 #include "../../hdrs/codexion.h"
 
 /// """
-/// Initialize mutex and condition variables.
+/// Initialize mutexes.
 /// """
-static bool	init_sys_mutex_1(t_data *data)
+static bool	init_mutexes(t_data *data)
 {
-	if (pthread_mutex_init(&data->scheduler_mutex, NULL) != 0)
-		return (false);
 	if (pthread_mutex_init(&data->time_mutex, NULL) != 0)
+		return (false);
+	if (pthread_mutex_init(&data->scheduler_mutex, NULL) != 0)
 	{
-		pthread_mutex_destroy(&data->scheduler_mutex);
+		pthread_mutex_destroy(&data->time_mutex);
 		return (false);
 	}
 	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
 	{
-		pthread_mutex_destroy(&data->scheduler_mutex);
 		pthread_mutex_destroy(&data->time_mutex);
+		pthread_mutex_destroy(&data->scheduler_mutex);
 		return (false);
 	}
 	return (true);
 }
 
 /// """
-/// Initialize mutex and condition variables 2.
+/// Initialize condition variables.
 /// """
-static bool	init_sys_mutex_2(t_data *data)
+static bool	init_conds(t_data *data)
 {
 	if (pthread_cond_init(&data->sv_cond, NULL) != 0)
 	{
-		pthread_mutex_destroy(&data->scheduler_mutex);
 		pthread_mutex_destroy(&data->time_mutex);
-		pthread_mutex_destroy(&data->print_mutex);
-		return (false);
-	}
-	if (pthread_cond_init(&data->exit_cond, NULL) != 0)
-	{
 		pthread_mutex_destroy(&data->scheduler_mutex);
-		pthread_mutex_destroy(&data->time_mutex);
 		pthread_mutex_destroy(&data->print_mutex);
-		pthread_cond_destroy(&data->sv_cond);
 		return (false);
 	}
 	if (pthread_cond_init(&data->start_cond, NULL) != 0)
 	{
-		pthread_mutex_destroy(&data->scheduler_mutex);
 		pthread_mutex_destroy(&data->time_mutex);
+		pthread_mutex_destroy(&data->scheduler_mutex);
 		pthread_mutex_destroy(&data->print_mutex);
 		pthread_cond_destroy(&data->sv_cond);
-		pthread_cond_destroy(&data->exit_cond);
+		return (false);
+	}
+	if (pthread_cond_init(&data->exit_cond, NULL) != 0)
+	{
+		pthread_mutex_destroy(&data->time_mutex);
+		pthread_mutex_destroy(&data->scheduler_mutex);
+		pthread_mutex_destroy(&data->print_mutex);
+		pthread_cond_destroy(&data->sv_cond);
+		pthread_cond_destroy(&data->start_cond);
 		return (false);
 	}
 	return (true);
 }
 
 /// """
-/// Allocate memory for the Coder, Dongle, Dongle_cond arrays
-/// based on the number of coders.
+/// Allocate memory for the Coder, Dongle, Dongle_cond arrays,
+/// available dongles array, tmp array based on the number of coders.
 /// """
 static bool	allocate_arrays(t_data *data)
 {
@@ -103,17 +103,17 @@ static bool	init_coders_and_conds(t_data *data)
 	{
 		if (pthread_cond_init(&data->dongle_conds[i], NULL) != 0)
 		{
-			rollback_conds(data, i);
+			rollback_dongle_conds(data, i);
 			return (false);
 		}
 		data->dongles[i].id = i;
 		data->dongles[i].state = AVAILABLE;
 		data->dongles[i].available_time = 0;
 		data->coders[i].id = i + 1;
-		data->coders[i].compile_count = 0;
-		data->coders[i].data = data;
 		data->coders[i].left_dongle_id = i;
 		data->coders[i].right_dongle_id = (i + 1) % data->num_coders;
+		data->coders[i].compile_count = 0;
+		data->coders[i].data = data;
 		data->coders[i].run = coder_routine;
 		data->coders[i].request_dongles = coder_request_dongles;
 		data->coders[i].release_dongles = coder_release_dongles;
@@ -127,31 +127,28 @@ static bool	init_coders_and_conds(t_data *data)
 /// Initialize function called when the program starts.
 /// If it fails, it rolls back all memory, mutexes, and condition variables
 /// allocated so far.
-/// Todo:
-/// - [x] data->coders/dongles/dongle_conds のfreeは1関数にまとめて呼び出す。
-/// - [ ] rollback_system_mutexes内で条件チェックし、初期化関数を簡略化する。
 /// """
 int	init_data(t_data *data)
 {
-	if (init_sys_mutex_1(data) == false || init_sys_mutex_2(data) == false)
+	if (init_mutexes(data) == false || init_conds(data) == false)
 		return (false);
 	if (allocate_arrays(data) == false)
 	{
-		rollback_system_mutexes(data);
+		rollback_mutexes_and_conds(data);
 		return (false);
 	}
 	if (!init_coders_and_conds(data))
 	{
 		free_arrays(data);
-		rollback_system_mutexes(data);
+		rollback_mutexes_and_conds(data);
 		return (false);
 	}
 	data->wait_queue = init_heap(data->num_coders, data->scheduler_type);
 	if (!data->wait_queue)
 	{
-		rollback_conds(data, data->num_coders);
+		rollback_dongle_conds(data, data->num_coders);
 		free_arrays(data);
-		rollback_system_mutexes(data);
+		rollback_mutexes_and_conds(data);
 		return (false);
 	}
 	data->is_simulation_running = true;
