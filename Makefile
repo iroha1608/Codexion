@@ -1,5 +1,5 @@
 # ----- Target -----
-TARGET		=	codexion
+NAME		=	codexion
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -pthread -I$(HDR_DIR)
 
@@ -56,9 +56,9 @@ vpath %.c	$(SRC_DIR) \
 			$(SRC_DIR)$(UTILS_DIR) \
 
 # Mandatory Part
-all:	$(TARGET)
+all:	$(NAME)
 
-$(TARGET):	$(OBJS)
+$(NAME):	$(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
 $(OBJ_DIR)%.o:	%.c $(HDRS) | $(OBJ_DIR)
@@ -71,7 +71,7 @@ clean:
 	rm -rf $(OBJ_DIR)
 
 fclean:	clean
-	rm -f $(TARGET)
+	rm -f $(NAME)
 
 re:	fclean all
 
